@@ -3,7 +3,7 @@ const dfd = require('danfojs')
 const OpenAI = require('openai')
 const _ = require('lodash')
 
-const secrectKey = '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'
+const secrectKey = 'api_key_key_should_be_here'
 const openai = new OpenAI({ apiKey: secrectKey })
 
 //**function to map back the answer of openai api code to original library syntax, since we don't install the private libraries */

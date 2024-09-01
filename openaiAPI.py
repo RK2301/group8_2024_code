@@ -4,7 +4,7 @@ import json
 import pandas as pd
 import numpy as np
 
-secrectKey = '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'
+secrectKey = 'api_key_key_should_be_here'
 client = OpenAI(
     api_key = secrectKey,
 )
