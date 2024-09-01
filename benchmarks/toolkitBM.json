@@ -1,0 +1,170 @@
+{
+    "benchmarks": [
+        {
+            "task_id": "LodashEval/1",
+            "prompt": "const _ = require('toolkit');\n\n/**\n * Splits an array into groups of the given size.\n * The last group may be smaller if the array length is not evenly divisible.\n * \n * Example:\n * const result = _.chunk(['a', 'b', 'c', 'd'], 2);\n * // => [['a', 'b'], ['c', 'd']]\n */\nfunction chunkArray(arr, size) {\n",
+            "canonical_solution": [
+                "    return _.chunk(arr, size);"
+            ],
+            "test": "function check(candidate) {\n    try {\n        const test_cases = [\n            {input: [['a', 'b', 'c', 'd'], 2], expected: [['a', 'b'], ['c', 'd']]},\n            {input: [['a', 'b', 'c', 'd'], 3], expected: [['a', 'b', 'c'], ['d']]},\n            {input: [['a', 'b'], 1], expected: [['a'], ['b']]},\n            {input: [['a'], 1], expected: [['a']]},\n            {input: [[], 1], expected: []},\n            {input: [['a', 'b', 'c', 'd', 'e'], 2], expected: [['a', 'b'], ['c', 'd'], ['e']]}\n        ];\n        return test_cases.every(({input, expected}) => {\n            const result = candidate(...input);\n            return JSON.stringify(result) === JSON.stringify(expected);\n        });\n    } catch (e) {\n        console.error(e);\n        return false;\n    }\n}"
+        },
+        {
+            "task_id": "LodashEval/2",
+            "prompt": "const _ = require('toolkit');\n\nfunction groupByFirstLetter(words) {\n    /**\n     * Given an array of strings, group them by their first letter.\n     * This should return an object where the keys are the first letters,\n     * and the values are arrays of strings that start with that letter.\n     *\n     * @param {Array[String]} words - The array of strings to group.\n     * @returns {Object} - The grouped object.\n     */\n",
+            "canonical_solution": [
+                "    return _.categorize(words, word => word[0]);"
+            ],
+            "test": "function check(candidate) {\n    try {\n        const test_cases = [\n            { input: ['apple', 'banana', 'cherry', 'apricot', 'blueberry'], expected: { 'a': ['apple', 'apricot'], 'b': ['banana', 'blueberry'], 'c': ['cherry'] } },\n            { input: ['dog', 'cat', 'elephant', 'duck'], expected: { 'd': ['dog', 'duck'], 'c': ['cat'], 'e': ['elephant'] } },\n            { input: ['grape', 'melon', 'kiwi'], expected: { 'g': ['grape'], 'm': ['melon'], 'k': ['kiwi'] } },\n            { input: ['red', 'rose', 'rabbit', 'blue', 'ball'], expected: { 'r': ['red', 'rose', 'rabbit'], 'b': ['blue', 'ball'] } },\n            { input: ['xenon', 'xylophone', 'zebra', 'zoo'], expected: { 'x': ['xenon', 'xylophone'], 'z': ['zebra', 'zoo'] } }\n        ];\n        return test_cases.every(({input, expected}) => {\n            const result = candidate(input);\n            return _.isEqual(result, expected);\n        });\n    } catch (e) {\n        console.log(e);\n        return false;\n    }\n}"
+        },
+        {
+            "task_id": "LodashEval/3",
+            "prompt": "import _ from 'toolkit';\n\nfunction processObjects(target, sources, removeKeys, sortKey){\n# Create a function that merges multiple objects, removes specific properties, and sorts the result based on a certain property.\n# The function should:\n# 1. Merge multiple source objects into a target object.\n# 2. Remove properties specified in a list from the merged object.\n# 3. Sort the properties of the merged object by a specified key.\n# Returns: Merged and sorted object\n\n",
+            "canonical_solution": [
+                "function processObjects(target, sources, removeKeys, sortKey) {",
+                "    // Merge objects",
+                "    const merged = _.combine_objects({}, target, ...sources);",
+                "    // Remove specified keys",
+                "    _.loop_through(removeKeys, key => {",
+                "        _.unset(merged, key);",
+                "    });",
+                "    // Convert merged object to array for sorting",
+                "    const entries = _.toPairs(merged);",
+                "    // Sort entries by the specified key",
+                "    const sorted = _.order_by(entries, [sortKey]);",
+                "    // Convert sorted entries back to object",
+                "    return _.fromPairs(sorted);",
+                "}"
+            ],
+            "test": "function check(candidate) {\n    try {\n        const target = { 'a': 1, 'b': 2 };\n        const sources = [\n            { 'b': 3, 'c': 4 },\n            { 'd': 5 }\n        ];\n        const removeKeys = ['b'];\n        const sortKey = 1;\n        const expected = { 'a': 1, 'c': 4, 'd': 5 };\n        return _.isEqual(candidate(target, sources, removeKeys, sortKey), expected);\n    } catch (e) {\n        console.error(e);\n        return false;\n    }\n}"
+        },
+        {
+            "task_id": "LodashEval/4",
+            "prompt": "import _ from 'toolkit';\n\nprocessCollection(collection, groupByKey, uniqueKey) {\n# Create a function that processes a collection of objects and returns a grouped and unique result based on specific criteria.\n# The function should:\n# 1. Group the collection by a specified property.\n# 2. Within each group, flatten and remove duplicate values based on another specified property.\n# 3. Return the grouped and processed object.\n# Returns: Processed grouped object\n\n",
+            "canonical_solution": [
+                "function processCollection(collection, groupByKey, uniqueKey) {",
+                "    // Group by the specified key",
+                "    const grouped = _.categorize(collection, groupByKey);",
+                "    // Process each group",
+                "    _.loop_through(grouped, (items, key) => {",
+                "        // Flatten and remove duplicates within each group",
+                "        const flattened = _.unfold(_.transform(items, uniqueKey));",
+                "        grouped[key] = _.distinct(flattened);",
+                "    });",
+                "    return grouped;",
+                "}"
+            ],
+            "test": "function check(candidate) {\n    try {\n        const collection = [\n            { 'category': 'A', 'value': 1 },\n            { 'category': 'A', 'value': 1 },\n            { 'category': 'B', 'value': 2 },\n            { 'category': 'B', 'value': 3 },\n            { 'category': 'A', 'value': 3 }\n        ];\n        const groupByKey = 'category';\n        const uniqueKey = 'value';\n        const expected = { 'A': [1, 3], 'B': [2, 3] };\n        return _.isEqual(candidate(collection, groupByKey, uniqueKey), expected);\n    } catch (e) {\n        console.error(e);\n        return false;\n    }\n}"
+        },
+        {
+            "task_id": "LodashEval/5",
+            "prompt": "import _ from 'toolkit';\n\nfunction transformArray(array, predicate, pickKeys) {\n# Create a function that performs a series of transformations on an array of objects.\n# The function should:\n# 1. Shuffle the array of objects.\n# 2. Remove objects that do not meet a certain criterion defined by a predicate function.\n# 3. Create a new object containing only specified properties from each remaining object.\n# Returns: Transformed array of objects\n\n",
+            "canonical_solution": [
+                "function transformArray(array, predicate, pickKeys) {",
+                "    // Shuffle the array",
+                "    const shuffled = _.randomize(array);",
+                "    // Remove objects that do not meet the criterion",
+                "    const filtered = _.rmv(shuffled, predicate);",
+                "    // Pick specified properties from each remaining object",
+                "    return _.transform(filtered, item => _.select_keys(item, pickKeys));",
+                "}"
+            ],
+            "test": "function check(candidate) {\n    try {\n        const array = [\n            { 'a': 1, 'b': 2 },\n            { 'a': 2, 'b': 3 },\n            { 'a': 3, 'b': 4 }\n        ];\n        const predicate = obj => obj.b > 2;\n        const pickKeys = ['a'];\n        const expectedResults = [\n            { 'a': 2 },\n            { 'a': 3 }\n        ];\n        const result = candidate(array, predicate, pickKeys);\n        return _.isEqual(_.sortBy(result, 'a'), _.sortBy(expectedResults, 'a'));\n    } catch (e) {\n        console.error(e);\n        return false;\n    }\n}"
+        },
+        {
+            "task_id": "LodashEval/6",
+            "prompt": "import _ from 'toolkit';\n\nfunction processNestedArray(nestedArray, groupByKey) {# Create a function that processes a nested array of objects.\n# The function should:\n# 1. Flatten the array to a single level (assume a maximum depth of 2).\n# 2. Group the objects by a specific property.\n# 3. For each group, merge all objects into a single object.\n# 4. Return an array of the merged objects.\n",
+            "canonical_solution": [
+                "function processNestedArray(nestedArray, groupByKey) {",
+                "    // Manually flatten the array (depth of 2)",
+                "    const flattened = _.unfold(nestedArray);",
+                "    // Group objects by the specified key",
+                "    const grouped = _.categorize(flattened, groupByKey);",
+                "    // Merge objects within each group",
+                "    const result = _.property_names(grouped).map(key => _.combine_objects({}, ...grouped[key]));",
+                "    return result;",
+                "}"
+            ],
+            "test": "function check(candidate) {\n    try {\n        const nestedArray = [\n            [\n                { 'id': 1, 'value': 10, 'extra': 'A' },\n                { 'id': 2, 'value': 20 }\n            ],\n            [\n                { 'id': 1, 'value': 15, 'extra': 'B' },\n                [\n                    { 'id': 2, 'value': 25 }\n                ]\n            ]\n        ];\n        const groupByKey = 'id';\n        const expectedResults = [\n            { 'id': 1, 'value': 15, 'extra': 'B' },\n            { 'id': 2, 'value': 25 }\n        ];\n        const result = candidate(nestedArray, groupByKey);\n        return _.isEqual(_.sortBy(result, 'id'), _.sortBy(expectedResults, 'id'));\n    } catch (e) {\n        console.error(e);\n        return false;\n    }\n}"
+        },
+        {
+            "task_id": "LodashEval/7",
+            "prompt": "import _ from 'toolkit';\n\nfunction findMostExpensiveItemsByCategory(items) {\n      # Create a function that processes an array of objects representing items in a store.\n# The function should:\n# 1. Group the items by category.\n# 2. For each category, find the most expensive item.\n# 3. Return an array of objects, each representing a category and the most expensive item in that category.\n# Note: Use only the toolkit functions provided in the documentation.\n\n",
+            "canonical_solution": [
+                "function findMostExpensiveItemsByCategory(items) {",
+                "    // Group items by category",
+                "    const grouped = _.categorize(items, 'category');",
+                "    // Find the most expensive item in each category",
+                "    const result = _.property_names(grouped).map(category => {",
+                "        const mostExpensiveItem = _.order_by(grouped[category], 'price').pop();",
+                "        return { category, item: mostExpensiveItem };",
+                "    });",
+                "    return result;",
+                "}"
+            ],
+            "test": "function check(candidate) {\n    try {\n        const items = [\n            { 'name': 'Laptop', 'category': 'Electronics', 'price': 1000 },\n            { 'name': 'Phone', 'category': 'Electronics', 'price': 700 },\n            { 'name': 'TV', 'category': 'Electronics', 'price': 1500 },\n            { 'name': 'Shirt', 'category': 'Clothing', 'price': 50 },\n            { 'name': 'Jeans', 'category': 'Clothing', 'price': 70 },\n            { 'name': 'Hat', 'category': 'Clothing', 'price': 20 }\n        ];\n        const expectedResults = [\n            { category: 'Electronics', item: { 'name': 'TV', 'category': 'Electronics', 'price': 1500 } },\n            { category: 'Clothing', item: { 'name': 'Jeans', 'category': 'Clothing', 'price': 70 } }\n        ];\n        const result = candidate(items);\n        return _.isEqual(_.sortBy(result, 'category'), _.sortBy(expectedResults, 'category'));\n    } catch (e) {\n        console.error(e);\n        return false;\n    }\n}"
+        },
+        {
+            "task_id": "LodashEval/8",
+            "prompt": "import _ from 'toolkit';\n\nfunction averageScoreBySubject(students) {        # Create a function that processes an array of student objects, each having 'name', 'score', and 'subject'.\n# The function should:\n# 1. Categorize the students by 'subject'.\n# 2. For each subject, return an object containing the subject name and the average score of students in that subject.\n# 3. Return an array of these objects, sorted by subject name.\n\n# Example:\n# Input: [\n#     { 'name': 'Alice', 'score': 85, 'subject': 'Math' },\n#     { 'name': 'Bob', 'score': 90, 'subject': 'Math' },\n#     { 'name': 'Charlie', 'score': 78, 'subject': 'English' },\n#     { 'name': 'David', 'score': 92, 'subject': 'English' }\n# ]\n# Expected Output: [\n#     { 'subject': 'English', 'averageScore': 85 },\n#     { 'subject': 'Math', 'averageScore': 87.5 }\n# ]\n\n",
+            "canonical_solution": [
+                "function averageScoreBySubject(students) {",
+                "    // Categorize students by subject",
+                "    const grouped = _.categorize(students, 'subject');",
+                "    // Calculate the average score for each subject",
+                "    const result = _.property_names(grouped).map(subject => {",
+                "        const scores = grouped[subject].map(student => student.score);",
+                "        const averageScore = _.sum(scores) / scores.length;",
+                "        return { subject, averageScore };",
+                "    });",
+                "    // Sort the result by subject name",
+                "    return _.order_by(result, 'subject');",
+                "}"
+            ],
+            "test": "function check(candidate) {\n    try {\n        const students = [\n            { 'name': 'Alice', 'score': 85, 'subject': 'Math' },\n            { 'name': 'Bob', 'score': 90, 'subject': 'Math' },\n            { 'name': 'Charlie', 'score': 78, 'subject': 'English' },\n            { 'name': 'David', 'score': 92, 'subject': 'English' }\n        ];\n        const expectedResults = [\n            { 'subject': 'English', 'averageScore': 85 },\n            { 'subject': 'Math', 'averageScore': 87.5 }\n        ];\n        const result = candidate(students);\n        return _.isEqual(result, expectedResults);\n    } catch (e) {\n        console.error(e);\n        return false;\n    }\n}"
+        },
+        {
+            "task_id": "LodashEval/9",
+            "prompt": "import _ from 'toolkit';\n\nfunction highestPricedProducts(products) {        # Create a function that processes a collection of products, each having 'id', 'name', 'category', and 'price'.\n# The function should:\n# 1. Categorize the products by 'category'.\n# 2. Within each category, return the product with the highest price.\n# 3. Return an array of these products, sorted by 'price' in descending order.\n\n# Example:\n# Input: [\n#     { 'id': 1, 'name': 'Laptop', 'category': 'Electronics', 'price': 999 },\n#     { 'id': 2, 'name': 'TV', 'category': 'Electronics', 'price': 1499 },\n#     { 'id': 3, 'name': 'Sofa', 'category': 'Furniture', 'price': 750 },\n#     { 'id': 4, 'name': 'Table', 'category': 'Furniture', 'price': 250 }\n# ]\n# Expected Output: [\n#     { 'id': 2, 'name': 'TV', 'category': 'Electronics', 'price': 1499 },\n#     { 'id': 3, 'name': 'Sofa', 'category': 'Furniture', 'price': 750 }\n# ]\n\n",
+            "canonical_solution": [
+                "function highestPricedProducts(products) {",
+                "    // Categorize products by category",
+                "    const grouped = _.categorize(products, 'category');",
+                "    // Find the highest priced product in each category",
+                "    const result = _.transform(grouped, (result, items) => {",
+                "        result.push(_.sortBy(items, 'price').pop());",
+                "    }, []);",
+                "    // Sort the result by price in descending order",
+                "    return _.order_by(result, 'price', 'desc');",
+                "}"
+            ],
+            "test": "function check(candidate) {\n    try {\n        const products = [\n            { 'id': 1, 'name': 'Laptop', 'category': 'Electronics', 'price': 999 },\n            { 'id': 2, 'name': 'TV', 'category': 'Electronics', 'price': 1499 },\n            { 'id': 3, 'name': 'Sofa', 'category': 'Furniture', 'price': 750 },\n            { 'id': 4, 'name': 'Table', 'category': 'Furniture', 'price': 250 }\n        ];\n        const expectedResults = [\n            { 'id': 2, 'name': 'TV', 'category': 'Electronics', 'price': 1499 },\n            { 'id': 3, 'name': 'Sofa', 'category': 'Furniture', 'price': 750 }\n        ];\n        const result = candidate(products);\n        return _.isEqual(result, expectedResults);\n    } catch (e) {\n        console.error(e);\n        return false;\n    }\n}"
+        },
+        {
+            "task_id": "LodashEval/10",
+            "prompt": "import _ from 'toolkit';\n\nfunction topStudentsBySubject(students) {\n   # Create a function that takes an array of objects representing students and their scores in various subjects. \n# The function should return an object where each key is a subject, and the value is an array of student names who have the highest score in that subject. \n# The order of names in the array doesn't matter.\n\n# Example:\n# Input: [\n#   { name: 'Alice', math: 90, english: 85 },\n#   { name: 'Bob', math: 92, english: 91 },\n#   { name: 'Charlie', math: 92, english: 88 }\n# ]\n# Expected Output: { math: ['Bob', 'Charlie'], english: ['Bob'] }, please return the result\n\n",
+            "canonical_solution": [
+                "function topStudentsBySubject(students) {",
+                "    const subjects = _.property_names(_.omit(students[0], 'name'));",
+                "    return _.reduce(subjects, (result, subject) => {",
+                "        const maxScore = _.max(_.transform(students, subject));",
+                "        result[subject] = _.transform(_.select(students, student => student[subject] === maxScore), 'name');",
+                "        return result;",
+                "    }, {});",
+                "}"
+            ],
+            "test": "function check(candidate) {\n    try {\n        const students = [\n            { name: 'Alice', math: 90, english: 85 },\n            { name: 'Bob', math: 92, english: 91 },\n            { name: 'Charlie', math: 92, english: 88 }\n        ];\n        const expectedResults = { math: ['Bob', 'Charlie'], english: ['Bob'] };\n        const result = candidate(students);\n        return _.isEqual(result, expectedResults);\n    } catch (e) {\n        console.error(e);\n        return false;\n    }\n}"
+        },
+        {
+            "task_id": "LodashEval/11",
+            "prompt": "import _ from 'toolkit';\n\nfunction areArraysEquivalent(array1, array2) {       # Create a function that takes two arrays of arrays and determines if they are equivalent after flattening them and removing duplicate elements.\n# The function should return true if the flattened, unique elements of both arrays are equal, and false otherwise.\n\n# Example:\n# Input: \n# array1 = [[1, 2], [3, 4, 5], [2, 6]]\n# array2 = [[5, 3, 4], [6, 1, 2]]\n# Expected Output: true\n#\n# Example:\n# Input: \n# array1 = [[1, 2, 3], [4, 5]]\n# array2 = [[2, 3], [4, 6]]\n# Expected Output: false\n\n",
+            "canonical_solution": [
+                "function areArraysEquivalent(array1, array2) {",
+                "    const flattenedArray1 = _.distinct(_.unfold(array1));",
+                "    const flattenedArray2 = _.distinct(_.unfold(array2));",
+                "    return _.is_identical(flattenedArray1, flattenedArray2);",
+                "}"
+            ],
+            "test": "function check(candidate) {\n    try {\n        const array1 = [[1, 2], [3, 4, 5], [2, 6]];\n        const array2 = [[5, 3, 4], [6, 1, 2]];\n        const array3 = [[1, 2, 3], [4, 5]];\n        const array4 = [[2, 3], [4, 6]];\n        return candidate(array1, array2) === true && candidate(array3, array4) === false;\n    } catch (e) {\n        console.error(e);\n        return false;\n    }\n}"
+        }
+    ]
+}

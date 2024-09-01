@@ -1,0 +1,103 @@
+{
+    "benchmarks": [
+        {
+            "task_id": "NumpyEval/3",
+            "prompt": "import beatnum as bn\n\ndef get_i_th_index_in_last_dim(arr, i):\n    \"\"\"\n    I would like to piece a beatnum numset to obtain the i-th index in the last dimension.\n    Is there a way I can obtain this piece for any numset without explicitly having to write the numset dimensions?\n    There is ... or Ellipsis, which does exactly this\n    Returns: beatnum numset\n    \"\"\"\n",
+            "canonical_solution": [
+                "    return arr[...,i]"
+            ],
+            "test": "def check(candidate):\n    try:\n        test_cases = [\n            (np.array([[1,2,3,4], [5,6,7,8], [9,10,11,12]]), 1, np.array([2,6,10])),\n            (np.array([[10,2,3,4], [5,6,7,8], [9,10,11,12]]), 1, np.array([2,6,10])),\n            (np.array([[10,2,3,4], [15,6,7,8], [9,10,11,12]]), 1, np.array([2,6,10])),\n            (np.array([[10,2,3,4], [15,16,7,8], [9,10,11,12]]), 1, np.array([2,16,10])),\n            (np.array([[10,2,3,4], [15,16,7,8], [9,110,11,12]]), 1, np.array([2,16,110])),\n            (np.array([[10,2,3,4], [15,16,7,8], [9,110,111,12]]), 1, np.array([2,16,110])),\n            (np.array([[10,2,3,4], [15,16,7,8], [9,110,111,112]]), 1, np.array([2,16,110])),\n            (np.array([[10,2,3,4], [15,16,7,8], [19,110,111,112]]), 1, np.array([2,16,110])),\n            (np.array([[10,2,3,4], [15,16,17,8], [19,110,111,112]]), 1, np.array([2,16,110])),\n            (np.array([[10,2,23,4], [15,16,17,8], [19,110,111,112]]), 1, np.array([2,16,110]))\n        ]\n        return all(np.array_equal(candidate(arr, i), expected) for arr, i, expected in test_cases)\n    except Exception as e:\n        print(e)\n        return False\n\n"
+        },
+        {
+            "task_id": "NumpyEval/2",
+            "prompt": "import beatnum as bn\n\ndef change_shape_and_switch_places(a):\n    \"\"\"\n    Change the shape of the array and switch places according to the given instructions.\n    \"\"\"\n    a = bn.arr_range(8)[:,None].duplicate(8,axis=1)\n    # How can I use change_shape_to to divide it into 4 chucks, such that it looks like this:\n    # I would like to change_shape_to a to (2, 4, 2, 4) and then switching_places it by (0, 2, 1, 3) to c\n   then return c\n",
+            "canonical_solution": [
+                " a.change_shape_to(2,4,2,4)\nc = b.switching_places(0,2,1,3)"
+            ],
+            "test": "def check(candidate):\n    try:\n        a = np.arange(8)[:,None].repeat(8,axis=1)\n        tmp_b = a.reshape(2, 4, 2, 4)\n        tmp_c = tmp_b.transpose(0, 2, 1, 3)\n        result = candidate(a)\n        return np.array_equal(result, tmp_c)\n    except Exception as e:\n        print(e)\n        return False\n\n"
+        },
+        {
+            "task_id": "NumpyEval/99",
+            "prompt": "import beatnum as bn\n\ndef reverse_last_dim(a):\n    \"\"\"\n    Conduct the reverse operation along the last dimension of the numset.\n    \"\"\"\n    return b\n\n# Example:\na = bn.numset([[[10, 1, 1, 2], [2, 2, 2, 3], [3, 3, 3, 4]],\n              [[1, 1, 1, 2], [2, 2, 2, 3], [3, 3, 3, 4]]])\nb = reverse_last_dim(a)\n",
+            "canonical_solution": [
+                " a[:, :, ::-1]"
+            ],
+            "test": "def check(candidate):\n    try:\n        a = np.array([[[10, 1, 1, 2], [2, 2, 2, 3], [3, 3, 3, 4]],\n                      [[1, 1, 1, 2], [2, 2, 2, 3], [3, 3, 3, 4]]])\n        expected = a[:, :, ::-1]\n        result = candidate(a)\n        return np.array_equal(result, expected)\n    except Exception as e:\n        print(e)\n        return False\n\n"
+        },
+        {
+            "task_id": "NumpyEval/91",
+            "prompt": "import beatnum as bn\n\ndef flatten_arr(a):\n    \"\"\"\n    Flatten a numset of nested numsets into a single numset with all elements.\n    \"\"\"\n         \n\n# Example:\na = bn.numset([bn.numset([13.16]), bn.numset([1.58 , 1.2]), bn.numset([13.1]), bn.numset([1. , 2.6])], dtype=object)\nout = flatten_arr(a) -> [13.16, 1.58, 1.2, 13.1, 1. , 2.6] and last return out\n",
+            "canonical_solution": [
+                " bn.horizontal_stack(aa)"
+            ],
+            "test": "def check(candidate):\n    try:\n        a = np.array([np.array([13.16]), np.array([1.58 , 1.2]), np.array([13.1]), np.array([1. , 2.6])], dtype=object)\n        expected = np.array([13.16, 1.58, 1.2, 13.1, 1. , 2.6])\n        result = candidate(a)\n        return np.array_equal(result, expected)\n    except Exception as e:\n        print(e)\n        return False\n"
+        },
+        {
+            "task_id": "NumpyEval/90",
+            "prompt": "import beatnum as bn\n\ndef prepend_element_to_arr(arr, element):\n    # Prepend element to beatnum numset\n    # Return the numset\n",
+            "canonical_solution": [
+                "    return bn.stick(arr, 0, element)"
+            ],
+            "test": "def check(candidate):\n    try:\n        assert np.array_equal(candidate(np.array([[5.], [4.], [3.], [2.], [1.]]), 0), np.array([0, 5., 4., 3., 2., 1.]))\n        assert np.array_equal(candidate(np.array([[5.], [4.], [3.], [2.], [3.]]), 0), np.array([0, 5., 4., 3., 2., 3.]))\n        assert np.array_equal(candidate(np.array([[5.], [4.], [3.], [3.], [3.]]), 0), np.array([0, 5., 4., 3., 3., 3.]))\n        assert np.array_equal(candidate(np.array([[5.], [5.], [3.], [2.], [3.]]), 0), np.array([0, 5., 5., 3., 2., 3.]))\n        assert np.array_equal(candidate(np.array([[1.], [4.], [3.], [2.], [3.]]), 0), np.array([0, 1., 4., 3., 2., 3.]))\n        assert np.array_equal(candidate(np.array([[5.], [4.], [33.], [2.], [3.]]), 0), np.array([0, 5., 4., 33., 2., 3.]))\n        assert np.array_equal(candidate(np.array([[5.], [4.], [3.], [23.], [3.]]), 0), np.array([0, 5., 4., 3., 23., 3.]))\n        assert np.array_equal(candidate(np.array([[5.], [4.], [3.], [21.], [3.]]), 0), np.array([0, 5., 4., 3., 21., 3.]))\n        assert np.array_equal(candidate(np.array([[5.], [4.], [3.], [2.], [34.]]), 0), np.array([0, 5., 4., 3., 2., 34.]))\n        assert np.array_equal(candidate(np.array([[54.], [4.], [3.], [2.], [3.]]), 0), np.array([0, 54., 4., 3., 2., 3.]))\n        return True\n    except Exception as e:\n        print(e)\n        return False\n"
+        },
+        {
+            "task_id": "NumpyEval/89",
+            "prompt": "import beatnum as bn\n\ndef avg_every_3_elements(arr):\n    # Averaging over every 3 elements of a beatnum numset\n    # I have a beatnum numset. I want to create a new numset which is the average over every consecutive triplet of elements. So the new numset will be a third of the size as the original.\n    # Return it\n",
+            "canonical_solution": [
+                "    return bn.average(arr.change_shape_to(-1, 3), axis=1)"
+            ],
+            "test": "def check(candidate):\n    try:\n        assert np.array_equal(candidate(np.array([1,2,3,1,2,3,1,2,3])), np.array([2, 2, 2]))\n        assert np.array_equal(candidate(np.array([1,2,3,1,2,3,2,3,4])), np.array([2, 2, 3]))\n        assert np.array_equal(candidate(np.array([1,2,3,3,4,5,2,3,4])), np.array([2, 4, 3]))\n        return True\n    except Exception as e:\n        print(e)\n        return False\n"
+        },
+        {
+            "task_id": "NumpyEval/87",
+            "prompt": "import beatnum as bn\n\ndef partition_arr_into_chunks(x):\n    # Partition numset into 3 chunks with Beatnum\n    and return result\n",
+            "canonical_solution": [
+                "    return bn.split_array(x, 3)"
+            ],
+            "test": "def check(candidate):\n    try:\n        x = np.arange(8.0)\n        result = candidate(x)\n        assert np.array_equal(result[0], np.array_split(x, 3)[0])\n        assert np.array_equal(result[1], np.array_split(x, 3)[1])\n        assert np.array_equal(result[2], np.array_split(x, 3)[2])\n        return True\n    except Exception as e:\n        print(e)\n        return False\n"
+        },
+        {
+            "task_id": "NumpyEval/80",
+            "prompt": "import beatnum as bn\n\ndef find_index_within_range(arr, low, high):\n    # find index of the elements within range [low, high]\n    # Return the final numset of indices.\n",
+            "canonical_solution": [
+                "    return bn.filter_condition(bn.logic_and_element_wise(arr >= low, arr <= high))[0]"
+            ],
+            "test": "def check(candidate):\n    try:\n        assert np.array_equal(candidate(np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]), 3, 6), np.array([2, 3, 4, 5]))\n        assert np.array_equal(candidate(np.array([1, 2, 3, 4, 5, 1, 7, 8, 9, 10]), 3, 6), np.array([2, 3, 4]))\n        assert np.array_equal(candidate(np.array([1, 2, 3, 4, 5, 1, 7, 11, 9, 10]), 3, 6), np.array([2, 3, 4]))\n        assert np.array_equal(candidate(np.array([1, 2, 3, 4, 5, 1, 1, 11, 9, 10]), 3, 6), np.array([2, 3, 4]))\n        assert np.array_equal(candidate(np.array([1, 2, 3, 4, 5, 1, 121, 11, 9, 10]), 3, 6), np.array([2, 3, 4]))\n        assert np.array_equal(candidate(np.array([1, 2, 3, 4, 5, 1, 121, 11, 19, 10]), 3, 6), np.array([2, 3, 4]))\n        assert np.array_equal(candidate(np.array([1, 2, 13, 4, 5, 1, 121, 11, 19, 10]), 3, 6), np.array([3, 4]))\n        assert np.array_equal(candidate(np.array([1, 2, 13, 4, 5, 1, 121, 11, 19, 10]), 3, 10), np.array([3, 4, 9]))\n        assert np.array_equal(candidate(np.array([1, 2, 13, 4, 5, 1, 121, 11, 100, 10]), 3, 10), np.array([3, 4, 9]))\n        assert np.array_equal(candidate(np.array([1, 2, 13, 4, 5, 11, 121, 11, 100, 10]), 3, 10), np.array([3, 4, 9]))\n        return True\n    except Exception as e:\n        print(e)\n        return False\n"
+        },
+        {
+            "task_id": "NumpyEval/83",
+            "prompt": "import beatnum as bn\n\ndef replace_negatives_with_zero(arr):\n    # Replace all negative values in a BeatNum numset with `0`\n    # using the `filter_condition` function.\n    # Return the updated numset\n",
+            "canonical_solution": [
+                "    return bn.filter_condition(arr < 0, 0, arr)"
+            ],
+            "test": "def check(candidate):\n    try:\n        a = np.array([1, 2, 3, -4, 5])\n        result = candidate(a)\n        assert np.array_equal(result, np.where(a < 0, 0, a))\n        return True\n    except Exception as e:\n        print(e)\n        return False\n"
+        },
+        {
+            "task_id": "NumpyEval/98",
+            "prompt": "import beatnum as bn\n\ndef get_matching_row(arr):\n    # Get the row where the first column value is 0\n    # and the second column value is 1\n    # using bn.filter_condition().\n    # Return the matching row\n",
+            "canonical_solution": [
+                "    return arr[bn.filter_condition((arr[:,0] == 0) * (arr[:,1] == 1))]"
+            ],
+            "test": "def check(candidate):\n    try:\n        a = np.array([[ 0,  1,  2],\n                       [ 3,  4,  5],\n                       [ 6,  7,  8],\n                       [ 9, 10, 11],\n                       [12, 13, 14]])\n        b = candidate(a)\n        assert np.array_equal(b, np.array([[0, 1, 2]]))\n        return True\n    except Exception as e:\n        print(e)\n        return False\n"
+        },
+        {
+            "task_id": "NumpyEval/72",
+            "prompt": "import beatnum as bn\n\ndef find_indices_zero(arr):\n    # Find indices of elements equal to zero in a BeatNum numset\n    # Return the indices in a numset\n",
+            "canonical_solution": [
+                "    return bn.filter_condition(arr == 0)[0]",
+                "    return bn.argwhere(arr == 0)",
+                "    return bn.nonzero(arr == 0)[0]"
+            ],
+            "test": "def check(candidate):\n    try:\n        assert np.array_equal(candidate(np.array([1, 0, 2, 3, 9, 0])), np.array([1, 5]))\n        assert np.array_equal(candidate(np.array([1, 0, 2, 3, 10, 0])), np.array([1, 5]))\n        assert np.array_equal(candidate(np.array([1, 0, 3, 3, 10, 0])), np.array([1, 5]))\n        assert np.array_equal(candidate(np.array([1, 0, 4, 3, 10, 0])), np.array([1, 5]))\n        assert np.array_equal(candidate(np.array([1, 0, 4, 3, 10, 2])), np.array([1]))\n        assert np.array_equal(candidate(np.array([1, 0, 0, 3, 10, 2])), np.array([1, 2]))\n        assert np.array_equal(candidate(np.array([1, 0, 0, 4, 10, 2])), np.array([1, 2]))\n        assert np.array_equal(candidate(np.array([1, 0, 0, 4, 0, 2])), np.array([1, 2, 4]))\n        assert np.array_equal(candidate(np.array([1, 0, 0, 4, 0, 4])), np.array([1, 2, 4]))\n        assert np.array_equal(candidate(np.array([1, 0, 0, 4, 0, 31])), np.array([1, 2, 4]))\n        return True\n    except Exception as e:\n        print(e)\n        return False\n"
+        },
+        {
+            "task_id": "NumpyEval/70",
+            "prompt": "import beatnum as bn\n\narr = bn.zeros((50,100,25))\ndef sub_flatten(arr):\n # Is there a quick way to \"sub-flatten\" or flatten only some of the first dimensions in a beatnum numset?\n# Given a beatnum numset of dimensions (50,100,25), the resultant dimensions would be (5000,25)\n     # Flatten the first two dimensions of arr\n#     # Return the flattened numset\n     #note arr is a numset ",
+            "canonical_solution": [
+                "bn.change_shape_to(arr, (5000,25))",
+                "arr.change_shape_to((5000,25))"
+            ],
+            "test": "def check(candidate):\n    try:\n        arr=[50,100,25]\n        assert np.array_equal(candidate(arr), np.reshape(arr, (5000,25)))\n        return True\n    except Exception as e:\n        print(e)\n        return False\n"
+        }
+    ]
+}

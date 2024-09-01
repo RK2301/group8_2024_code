@@ -1,0 +1,138 @@
+{
+    "benchmarks": [
+        {
+            "task_id": "DanfoEval/1",
+            "prompt": "import * as dfd from 'danfojs';\n\nfunction mergeDataFrames(df1, df2, key) {\n    // Merge two DataFrames on the specified key\n    // Use an inner join\n    // Return the merged DataFrame\n}",
+            "canonical_solution": [
+                "    return dfd.merge(df1, df2, {on: key, how: 'inner'});"
+            ],
+            "test": "\n\nfunction check(candidate) {\n    let df1 = new dfd.DataFrame({A: ['foo', 'bar', 'baz'], B: [1, 2, 3]});\n    let df2 = new dfd.DataFrame({A: ['foo', 'bar', 'qux'], C: [4, 5, 6]});\n    let result = candidate(df1, df2, 'A');\n    let expected = new dfd.DataFrame({A: ['foo', 'bar'], B: [1, 2], C: [4, 5]});\n    result.print();\n    expected.print();\n    console.assert(result.values.toString() === expected.values.toString(), 'Test failed');\n}\n\ncheck(mergeDataFrames);"
+        },
+        {
+            "task_id": "DanfoEval/2",
+            "prompt": "import * as dfd from 'danfojs';\n\nfunction concatenateAndSort(df1, df2, sortColumn) {\n    // Concatenate two DataFrames along the rows\n    // Sort the resulting DataFrame by the specified column in descending order\n    // Return the sorted DataFrame\n}",
+            "canonical_solution": [
+                "    const concatenated = dfd.concat([df1, df2], {axis: 0});",
+                "    return concatenated.sortValues(sortColumn, {ascending: false});"
+            ],
+            "test": "\n\nfunction check(candidate) {\n    let df1 = new dfd.DataFrame({A: [3, 1], B: [2, 5]});\n    let df2 = new dfd.DataFrame({A: [6, 4], B: [3, 8]});\n    let result = candidate(df1, df2, 'A');\n    let expected = new dfd.DataFrame({A: [6, 4, 3, 1], B: [3, 8, 2, 5]});\n    result.print();\n    expected.print();\n    console.assert(result.values.toString() === expected.values.toString(), 'Test failed');\n}\n\ncheck(concatenateAndSort);"
+        },
+        {
+            "task_id": "DanfoEval/3",
+            "prompt": "import * as dfd from 'danfojs';\n\nfunction groupByAndComputeMean(df, groupColumn) {\n    // Group the DataFrame by the specified column\n    // Compute the mean for each group\n    // Return a DataFrame with the group names and the corresponding mean values\n}",
+            "canonical_solution": [
+                "    const grouped = df.groupby([groupColumn]);",
+                "    const meanValues = grouped.mean();",
+                "    return meanValues;"
+            ],
+            "test": "\n\nfunction check(candidate) {\n    let df = new dfd.DataFrame({A: ['foo', 'bar', 'foo', 'bar'], B: [1, 2, 3, 4], C: [5, 6, 7, 8]});\n    let result = candidate(df, 'A');\n    let expected = new dfd.DataFrame({A: ['bar', 'foo'], B: [3, 2], C: [7, 6]});\n    result.print();\n    expected.print();\n    console.assert(result.values.toString() === expected.values.toString(), 'Test failed');\n}\n\ncheck(groupByAndComputeMean);"
+        },
+        {
+            "task_id": "DanfoEval/4",
+            "prompt": "import * as dfd from 'danfojs';\n\nfunction mergeDataFramesOnMultipleColumns(df1, df2, keys) {\n    // Merge two DataFrames on multiple keys\n    // Use an 'outer' join type\n    // Return the merged DataFrame\n}",
+            "canonical_solution": [
+                "    const merged = dfd.merge(df1, df2, {on: keys, how: 'outer'});",
+                "    return merged;"
+            ],
+            "test": "\n\nfunction check(candidate) {\n    let df1 = new dfd.DataFrame({A: ['foo', 'bar', 'baz'], B: [1, 2, 3], C: [4, 5, 6]});\n    let df2 = new dfd.DataFrame({A: ['foo', 'bar', 'qux'], B: [1, 2, 4], D: [7, 8, 9]});\n    let result = candidate(df1, df2, ['A', 'B']);\n    let expected = new dfd.DataFrame({A: ['foo', 'bar', 'baz', 'qux'], B: [1, 2, 3, 4], C: [4, 5, 6, NaN], D: [7, 8, NaN, 9]});\n    result.print();\n    expected.print();\n    console.assert(result.values.toString() === expected.values.toString(), 'Test failed');\n}\n\ncheck(mergeDataFramesOnMultipleColumns);"
+        },
+        {
+            "task_id": "DanfoEval/5",
+            "prompt": "import * as dfd from 'danfojs';\n\nfunction fillNaWithGroupMean(df, groupColumn, fillColumn) {\n    // Group the DataFrame by the specified column\n    // Fill NaN values in the specified column with the mean of the group\n    // Return the modified DataFrame\n}",
+            "canonical_solution": [
+                "    const grouped = df.groupby([groupColumn]);",
+                "    const filled = grouped.apply(group => group.fillNa({values: group[fillColumn].mean(), columns: [fillColumn], inplace: false}));",
+                "    return filled;"
+            ],
+            "test": "\n\nfunction check(candidate) {\n    let df = new dfd.DataFrame({A: ['foo', 'foo', 'bar', 'bar'], B: [1, NaN, 3, NaN], C: [5, 6, 7, 8]});\n    let result = candidate(df, 'A', 'B');\n    let expected = new dfd.DataFrame({A: ['foo', 'foo', 'bar', 'bar'], B: [1, 1, 3, 3], C: [5, 6, 7, 8]});\n    result.print();\n    expected.print();\n    console.assert(result.values.toString() === expected.values.toString(), 'Test failed');\n}\n\ncheck(fillNaWithGroupMean);"
+        },
+        {
+            "task_id": "DanfoEval/6",
+            "prompt": "import * as dfd from 'danfojs';\n\nfunction sortByMultipleColumns(df, columns, ascending) {\n    // Sort the DataFrame by multiple columns with custom ascending/descending conditions\n    // Return the sorted DataFrame\n}",
+            "canonical_solution": [
+                "    const sorted = df.sortValues(columns, {ascending: ascending, inplace: false});",
+                "    return sorted;"
+            ],
+            "test": "\n\nfunction check(candidate) {\n    try {\n        let df = new dfd.DataFrame({A: [1, 2, 2, 1], B: [3, 4, 2, 1], C: [5, 6, 7, 8]});\n        let result = candidate(df, ['A', 'B'], true); // Assuming single sorting order\n        let expected = new dfd.DataFrame({A: [1, 1, 2, 2], B: [1, 3, 4, 2], C: [8, 5, 6, 7]});\n        return result.values.toString() === expected.values.toString();\n    } catch (e) {\n        console.error(e.message);\n        return false;\n    }\n}\n\n;"
+        },
+        {
+            "task_id": "DanfoEval/9",
+            "prompt": "import * as dfd from 'danfojs';\n\nfunction filterWithMultipleConditions(df, conditions) {\n    // Filter the DataFrame based on multiple complex conditions\n    // Each condition should be a function that returns a boolean\n    // Combine the conditions with logical AND/OR\n    // Return the filtered DataFrame\n}",
+            "canonical_solution": [
+                "    const filtered = df.loc(conditions.reduce((acc, condition) => acc.and(condition(df)), dfd.Series.ones(df.shape[0])));",
+                "    return filtered;"
+            ],
+            "test": "\n\nfunction check(candidate) {\n    let df = new dfd.DataFrame({A: [1, 2, 3, 4], B: [5, 6, 7, 8], C: [9, 10, 11, 12]});\n    let conditions = [row => row.get('A') > 2, row => row.get('B') < 8];\n    let result = candidate(df, conditions);\n    let expected = new dfd.DataFrame({A: [3], B: [7], C: [11]});\n    result.print();\n    expected.print();\n    console.assert(result.values.toString() === expected.values.toString(), 'Test failed');\n}\n\ncheck(filterWithMultipleConditions);"
+        },
+        {
+            "task_id": "DanfoEval/10",
+            "prompt": "import * as dfd from 'danfojs';\n\nfunction fillMissingAndSort(df, fillValue, sortColumn) {\n    // Fill missing values in the DataFrame with the specified value\n    // Sort the DataFrame by the specified column in descending order\n    // Return the modified DataFrame\n}",
+            "canonical_solution": [
+                "    df.fillNa([fillValue], { inplace: true });",
+                "    df.sortValues(sortColumn, { ascending: false, inplace: true });",
+                "    return df;"
+            ],
+            "test": "\n\nfunction check(candidate) {\n    try {\n        let df = new dfd.DataFrame({ A: [1, NaN, 3], B: [NaN, 2, 1] });\n        let result = candidate(df, 0, 'B');\n        let expected = new dfd.DataFrame({ A: [1, 3, 0], B: [2, 1, 0] });\n        return result.values.toString() === expected.values.toString();\n    } catch (e) {\n        console.error(e.message);\n        return false;\n    }\n}\n\n;"
+        },
+        {
+            "task_id": "DanfoEval/11",
+            "prompt": "import * as dfd from 'danfojs';\n\nfunction groupByAndConcat(df, groupColumn) {\n    // Group the DataFrame by the specified column\n    // Concatenate the resulting groups along the column axis\n    // Return the concatenated DataFrame\n}",
+            "canonical_solution": [
+                "    let grouped = df.groupby([groupColumn]);",
+                "    let concatGroups = dfd.concat(grouped, { axis: 1 });",
+                "    return concatGroups;"
+            ],
+            "test": "\n\nfunction check(candidate) {\n    let df = new dfd.DataFrame({ A: ['foo', 'bar', 'foo'], B: [1, 2, 3], C: [4, 5, 6] });\n    let result = candidate(df, 'A');\n    let expected = new dfd.DataFrame({ foo: [1, 3], bar: [2], C: [4, 5, 6] });\n    console.assert(result.values.toString() === expected.values.toString(), 'Test failed');\n}\n\ncheck(groupByAndConcat);"
+        },
+        {
+            "task_id": "DanfoEval/12",
+            "prompt": "import * as dfd from 'danfojs';\n\nfunction mergeWithComplexConditions(df1, df2, key1, key2, conditionFunc) {\n    // Merge two DataFrames based on complex conditions provided by a custom function\n    // The condition function determines how the keys from both DataFrames are compared\n    // Return the merged DataFrame\n}",
+            "canonical_solution": [
+                "    const merged = df1.merge({right: df2, on: [key1, key2], how: 'inner'});",
+                "    const filtered = merged.filter(row => conditionFunc(row));",
+                "    return filtered;"
+            ],
+            "test": "\n\nfunction check(candidate) {\n    let df1 = new dfd.DataFrame({A: ['foo', 'bar', 'baz'], B: [1, 2, 3]});\n    let df2 = new dfd.DataFrame({C: ['foo', 'bar', 'qux'], D: [4, 5, 6]});\n    let conditionFunc = row => row.get('B') + row.get('D') > 5;\n    let result = candidate(df1, df2, 'A', 'C', conditionFunc);\n    let expected = new dfd.DataFrame({A: ['foo', 'bar'], B: [1, 2], C: ['foo', 'bar'], D: [4, 5]});\n    result.print();\n    expected.print();\n    console.assert(result.values.toString() === expected.values.toString(), 'Test failed');\n}\n\ncheck(mergeWithComplexConditions);"
+        },
+        {
+            "task_id": "DanfoEval/13",
+            "prompt": "import * as dfd from 'danfojs';\n\nfunction mergeOnSingleKey(df1, df2) {\n    // Merge two DataFrames on the column 'key'\n    // Use an inner join\n    // Return the merged DataFrame\n}",
+            "canonical_solution": [
+                "    return dfd.merge({left: df1, right: df2, on: ['key'], how: 'inner'});"
+            ],
+            "test": "\n\nfunction check(candidate) {\n    let df1 = new dfd.DataFrame({key: ['A', 'B', 'C'], value1: [1, 2, 3]});\n    let df2 = new dfd.DataFrame({key: ['A', 'B', 'D'], value2: [4, 5, 6]});\n    let result = candidate(df1, df2);\n    let expected = new dfd.DataFrame({key: ['A', 'B'], value1: [1, 2], value2: [4, 5]});\n    let allTestsPassed = true;\n    try {\n        if (result.values.toString() !== expected.values.toString()) {\n            console.error('Test case 1 failed');\n            allTestsPassed = false;\n        }\n    } catch (e) {\n        console.error(e.message);\n        allTestsPassed = false;\n    }\n    return allTestsPassed;\n}\n\n;"
+        },
+        {
+            "task_id": "DanfoEval/14",
+            "prompt": "import * as dfd from 'danfojs';\n\nfunction cleanAndCombine(df1, df2) {\n    // Drop rows with missing values from both DataFrames\n    // Concatenate the cleaned DataFrames along the rows\n    // Return the resulting DataFrame\n}",
+            "canonical_solution": [
+                "    const cleaned1 = df1.dropNa({axis: 1});",
+                "    const cleaned2 = df2.dropNa({axis: 1});",
+                "    return dfd.concat({dfList: [cleaned1, cleaned2], axis: 0});"
+            ],
+            "test": "\n\nfunction check(candidate) {\n    try {\n        let df1 = new dfd.DataFrame({A: [1, 2, NaN], B: [4, NaN, 6]});\n        let df2 = new dfd.DataFrame({A: [7, NaN, 9], B: [NaN, 11, 12]});\n        let result = candidate(df1, df2);\n        let expected = new dfd.DataFrame({A: [1, 9], B: [4, 12]});\n        result.print();\n        expected.print();\n        if (result.values.toString() !== expected.values.toString()) {\n            console.error('Test failed');\n            return false;\n        }\n        return true;\n    } catch (e) {\n        console.error(e.message);\n        return false;\n    }\n}\n\n;"
+        },
+        {
+            "task_id": "DanfoEval/10",
+            "prompt": "import * as dfd from 'danfojs';\n\nfunction groupMean(df, groupColumn) {\n    // Group the DataFrame by the specified column\n    // Calculate the mean for each group\n    // Return a DataFrame with the mean values\n}",
+            "canonical_solution": [
+                "    const grouped = df.groupby([groupColumn]);",
+                "    const meanValues = grouped.mean();",
+                "    return meanValues;"
+            ],
+            "test": "\n\nfunction check(candidate) {\n    try {\n        let df = new dfd.DataFrame({A: ['apple', 'apple', 'orange', 'orange'], B: [10, 20, 30, 40], C: [5, 15, 25, 35]});\n        let result = candidate(df, 'A');\n        let expected = new dfd.DataFrame({A: ['apple', 'orange'], B: [15, 35], C: [10, 30]});\n        return result.values.toString() === expected.values.toString();\n    } catch (e) {\n        console.error(e.message);\n        return false;\n    }\n}\n\n;"
+        },
+        {
+            "task_id": "DanfoEval/11",
+            "prompt": "import * as dfd from 'danfojs';\n\nfunction processAndMerge(df1, df2, groupColumn) {\n    // Group the first DataFrame by the specified column\n    // Calculate the mean for each group\n    // Drop any rows with missing values\n    // Concatenate the cleaned DataFrame with the second DataFrame\n    // Return the resulting DataFrame.\n     //example: d1={A: ['x', 'y', 'x', 'z'], B: [10, 20, NaN, 30], C: [5, NaN, 15, 25]}\n        //d2={D: [100, 200, 300], E: [1, 2, 3]}\n       //result should be: {A: ['x', 'z'], B: [10, 30], C: [5, 25], D: [100, 300], E: [1, 3]}}",
+            "canonical_solution": [
+                "    // Group the first DataFrame and calculate the mean\n    const grouped = df1.groupby([groupColumn]);",
+                "    const meanDF = grouped.mean();",
+                "    // Drop rows with NaN values\n    const cleanedDF = meanDF.dropNa({axis: 0});",
+                "    // Concatenate with the second DataFrame\n    const result = dfd.concat({dfList: [cleanedDF, df2], axis: 1});",
+                "    return result;"
+            ],
+            "test": "\n\nfunction check(candidate) {\n    try {\n        // Define test DataFrames\n        let df1 = new dfd.DataFrame({A: ['x', 'y', 'x', 'z'], B: [10, 20, NaN, 30], C: [5, NaN, 15, 25]});\n        let df2 = new dfd.DataFrame({D: [100, 200, 300], E: [1, 2, 3]});\n        let result = candidate(df1, df2, 'A');\n        let expected = new dfd.DataFrame({A: ['x', 'z'], B: [10, 30], C: [5, 25], D: [100, 300], E: [1, 3]});\n        return result.values.toString() === expected.values.toString();\n    } catch (e) {\n        console.error(e.message);\n        return false;\n    }\n}\n\n;"
+        }
+    ]
+}

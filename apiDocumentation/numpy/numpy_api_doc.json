@@ -1,0 +1,551 @@
+{
+    "numpy": {
+        "description": "NumPy is the fundamental package for scientific computing with Python. It contains among other things a powerful N-dimensional array object, sophisticated (broadcasting) functions, tools for integrating C/C++ and Fortran code, and useful linear algebra, Fourier transform, and random number capabilities.",
+        "functions": {
+            "array": {
+                "description": "Creates an array.",
+                "parameters": [
+                    {
+                        "name": "object",
+                        "type": "array_like",
+                        "description": "An array, any object exposing the array interface, or any (nested) sequence."
+                    },
+                    {
+                        "name": "dtype",
+                        "type": "data-type, optional",
+                        "description": "The desired data-type for the array. If not given, then the type will be determined as the minimum type required to hold the objects in the sequence."
+                    },
+                    {
+                        "name": "copy",
+                        "type": "bool, optional",
+                        "description": "If true (default), then the object is copied. Otherwise, a copy will only be made if __array__ returns a copy, if obj is a nested sequence, or if a copy is needed to satisfy any of the other requirements."
+                    }
+                ],
+                "example": "import numpy as np\n\narr = np.array([1, 2, 3])"
+            },
+            "arange": {
+                "description": "Returns evenly spaced values within a given interval.",
+                "parameters": [
+                    {
+                        "name": "start",
+                        "type": "number, optional",
+                        "description": "Start of interval. The interval includes this value. The default start value is 0."
+                    },
+                    {
+                        "name": "stop",
+                        "type": "number",
+                        "description": "End of interval. The interval does not include this value, except in some cases where step is not an integer and floating point round-off affects the length of out."
+                    },
+                    {
+                        "name": "step",
+                        "type": "number, optional",
+                        "description": "Spacing between values. For any output, this is the distance between two adjacent values, out[i+1] - out[i]. The default step size is 1. If step is specified as a position argument, start must also be given."
+                    },
+                    {
+                        "name": "dtype",
+                        "type": "dtype, optional",
+                        "description": "The type of the output array. If dtype is not given, infer the data type from the other input arguments."
+                    }
+                ],
+                "example": "import numpy as np\n\narr = np.arange(0, 10, 2)"
+            },
+            "linspace": {
+                "description": "Returns evenly spaced numbers over a specified interval.",
+                "parameters": [
+                    {
+                        "name": "start",
+                        "type": "scalar",
+                        "description": "The starting value of the sequence."
+                    },
+                    {
+                        "name": "stop",
+                        "type": "scalar",
+                        "description": "The end value of the sequence, unless endpoint is set to False. In that case, the sequence consists of all but the last of num + 1 evenly spaced samples, so that stop is excluded. Note that the step size changes when endpoint is False."
+                    },
+                    {
+                        "name": "num",
+                        "type": "int, optional",
+                        "description": "Number of samples to generate. Default is 50. Must be non-negative."
+                    },
+                    {
+                        "name": "endpoint",
+                        "type": "bool, optional",
+                        "description": "If True, stop is the last sample. Otherwise, it is not included. Default is True."
+                    },
+                    {
+                        "name": "retstep",
+                        "type": "bool, optional",
+                        "description": "If True, return (samples, step), where step is the spacing between samples."
+                    },
+                    {
+                        "name": "dtype",
+                        "type": "dtype, optional",
+                        "description": "The type of the output array. If dtype is not given, infer the data type from the other input arguments."
+                    }
+                ],
+                "example": "import numpy as np\n\narr = np.linspace(0, 1, 5)"
+            },
+            "zeros": {
+                "description": "Returns a new array of given shape and type, filled with zeros.",
+                "parameters": [
+                    {
+                        "name": "shape",
+                        "type": "int or tuple of int",
+                        "description": "Shape of the new array, e.g., (2, 3) or 2."
+                    },
+                    {
+                        "name": "dtype",
+                        "type": "data-type, optional",
+                        "description": "The desired data-type for the array, e.g., numpy.int8. Default is numpy.float64."
+                    },
+                    {
+                        "name": "order",
+                        "type": "str, optional",
+                        "description": "Whether to store multidimensional data in C-contiguous (row-major) or Fortran-contiguous (column-major) order in memory."
+                    }
+                ],
+                "example": "import numpy as np\n\narr = np.zeros((2, 3))"
+            },
+            "ones": {
+                "description": "Returns a new array of given shape and type, filled with ones.",
+                "parameters": [
+                    {
+                        "name": "shape",
+                        "type": "int or tuple of int",
+                        "description": "Shape of the new array, e.g., (2, 3) or 2."
+                    },
+                    {
+                        "name": "dtype",
+                        "type": "data-type, optional",
+                        "description": "The desired data-type for the array, e.g., numpy.int8. Default is numpy.float64."
+                    },
+                    {
+                        "name": "order",
+                        "type": "str, optional",
+                        "description": "Whether to store multidimensional data in C-contiguous (row-major) or Fortran-contiguous (column-major) order in memory."
+                    }
+                ],
+                "example": "import numpy as np\n\narr = np.ones((2, 3))"
+            },
+            "reshape": {
+                "description": "Gives a new shape to an array without changing its data.",
+                "parameters": [
+                    {
+                        "name": "a",
+                        "type": "array_like",
+                        "description": "The array to be reshaped."
+                    },
+                    {
+                        "name": "newshape",
+                        "type": "int or tuple of ints",
+                        "description": "The new shape should be compatible with the original shape. If an integer, then the result will be a 1-D array of that length."
+                    },
+                    {
+                        "name": "order",
+                        "type": "str, optional",
+                        "description": "Read the elements of a using this index order, and place the elements into the reshaped array using this index order. Options are 'C' for row-major, 'F' for column-major, 'A' for Fortran-like, or 'K' for as close to the original ordering as possible. Default is 'C'."
+                    }
+                ],
+                "example": "import numpy as np\n\narr = np.array([[1, 2], [3, 4]])\nreshaped = np.reshape(arr, (4,))"
+            },
+            "transpose": {
+                "description": "Permutes the dimensions of an array.",
+                "parameters": [
+                    {
+                        "name": "a",
+                        "type": "array_like",
+                        "description": "The array to be transposed."
+                    },
+                    {
+                        "name": "axes",
+                        "type": "tuple or list of ints, optional",
+                        "description": "By default, reverse the dimensions, otherwise permute the axes according to the values given."
+                    }
+                ],
+                "example": "import numpy as np\n\narr = np.array([[1, 2], [3, 4]])\ntransposed = np.transpose(arr)"
+            },
+            "concatenate": {
+                "description": "Joins a sequence of arrays along an existing axis.",
+                "parameters": [
+                    {
+                        "name": "a",
+                        "type": "sequence of array_like",
+                        "description": "The arrays must have the same shape, except in the dimension corresponding to axis (the first, by default)."
+                    },
+                    {
+                        "name": "axis",
+                        "type": "int, optional",
+                        "description": "The axis along which the arrays will be joined. If axis is None, arrays are flattened before use. Default is 0."
+                    }
+                ],
+                "example": "import numpy as np\n\narr1 = np.array([1, 2, 3])\narr2 = np.array([4, 5, 6])\nconcatenated = np.concatenate((arr1, arr2))"
+            },
+            "mean": {
+                "description": "Computes the arithmetic mean along the specified axis.",
+                "parameters": [
+                    {
+                        "name": "a",
+                        "type": "array_like",
+                        "description": "Array containing numbers whose mean is desired."
+                    },
+                    {
+                        "name": "axis",
+                        "type": "int or None, optional",
+                        "description": "Axis or axes along which the means are computed. The default is to compute the mean of the flattened array."
+                    },
+                    {
+                        "name": "dtype",
+                        "type": "data-type, optional",
+                        "description": "Type to use in computing the mean. For integer inputs, the default is float64; for floating point inputs, it is the same as the input dtype."
+                    }
+                ],
+                "example": "import numpy as np\n\narr = np.array([1, 2, 3, 4])\nmean_value = np.mean(arr)"
+            },
+            "std": {
+                "description": "Computes the standard deviation along the specified axis.",
+                "parameters": [
+                    {
+                        "name": "a",
+                        "type": "array_like",
+                        "description": "Array containing numbers whose standard deviation is desired."
+                    },
+                    {
+                        "name": "axis",
+                        "type": "int or None, optional",
+                        "description": "Axis or axes along which the standard deviations are computed. The default is to compute the standard deviation of the flattened array."
+                    },
+                    {
+                        "name": "dtype",
+                        "type": "data-type, optional",
+                        "description": "Type to use in computing the standard deviation. For integer inputs, the default is float64; for floating point inputs, it is the same as the input dtype."
+                    },
+                    {
+                        "name": "ddof",
+                        "type": "int, optional",
+                        "description": "Means Delta Degrees of Freedom. The divisor used in calculations is N - ddof, where N represents the number of elements. By default ddof is zero."
+                    }
+                ],
+                "example": "import numpy as np\n\narr = np.array([1, 2, 3, 4])\nstd_value = np.std(arr)"
+            },
+            "dot": {
+                "description": "Dot product of two arrays. For 2-D vectors, it is equivalent to matrix multiplication, and for 1-D vectors, it is the inner product.",
+                "parameters": [
+                    {
+                        "name": "a",
+                        "type": "array_like",
+                        "description": "First argument."
+                    },
+                    {
+                        "name": "b",
+                        "type": "array_like",
+                        "description": "Second argument."
+                    },
+                    {
+                        "name": "out",
+                        "type": "ndarray, optional",
+                        "description": "Output argument. If provided, the result will be inserted into this array. It should be of the appropriate shape and dtype."
+                    }
+                ],
+                "example": "import numpy as np\n\na = np.array([1, 2])\nb = np.array([3, 4])\ndot_product = np.dot(a, b)"
+            },
+            "sum": {
+                "description": "Sum of array elements over a given axis.",
+                "parameters": [
+                    {
+                        "name": "a",
+                        "type": "array_like",
+                        "description": "Elements to sum."
+                    },
+                    {
+                        "name": "axis",
+                        "type": "int or None, optional",
+                        "description": "Axis or axes along which a sum is performed. The default, axis=None, will sum all of the elements of the input array. If axis is negative it counts from the last to the first axis."
+                    },
+                    {
+                        "name": "dtype",
+                        "type": "data-type, optional",
+                        "description": "The type of the returned array and of the accumulator in which the elements are summed."
+                    },
+                    {
+                        "name": "out",
+                        "type": "ndarray, optional",
+                        "description": "Alternative output array in which to place the result. It must have the same shape as the expected output."
+                    },
+                    {
+                        "name": "keepdims",
+                        "type": "bool, optional",
+                        "description": "If this is set to True, the axes which are reduced are left in the result as dimensions with size one. With this option, the result will broadcast correctly against the input array."
+                    }
+                ],
+                "example": "import numpy as np\n\narr = np.array([[1, 2], [3, 4]])\nsum_value = np.sum(arr, axis=0)"
+            },
+            "sqrt": {
+                "description": "Return the non-negative square-root of an array, element-wise.",
+                "parameters": [
+                    {
+                        "name": "x",
+                        "type": "array_like",
+                        "description": "The values whose square-roots are required."
+                    },
+                    {
+                        "name": "out",
+                        "type": "ndarray, optional",
+                        "description": "A location into which the result is stored. If provided, it must have a shape that the inputs broadcast to. If not provided or None, a freshly-allocated array is returned."
+                    },
+                    {
+                        "name": "where",
+                        "type": "array_like, optional",
+                        "description": "This condition is broadcast over the input. At locations where the condition is True, the out array will be set to the ufunc result. Elsewhere, the out array will retain its original value."
+                    }
+                ],
+                "example": "import numpy as np\n\narr = np.array([1, 4, 9])\nsqrt_values = np.sqrt(arr)"
+            },
+            "power": {
+                "description": "First array elements raised to powers from second array, element-wise.",
+                "parameters": [
+                    {
+                        "name": "x1",
+                        "type": "array_like",
+                        "description": "The bases."
+                    },
+                    {
+                        "name": "x2",
+                        "type": "array_like",
+                        "description": "The exponents."
+                    },
+                    {
+                        "name": "out",
+                        "type": "ndarray, optional",
+                        "description": "A location into which the result is stored. If provided, it must have a shape that the inputs broadcast to. If not provided or None, a freshly-allocated array is returned."
+                    },
+                    {
+                        "name": "where",
+                        "type": "array_like, optional",
+                        "description": "This condition is broadcast over the input. At locations where the condition is True, the out array will be set to the ufunc result. Elsewhere, the out array will retain its original value."
+                    }
+                ],
+                "example": "import numpy as np\n\narr = np.array([1, 2, 3])\npowered = np.power(arr, 2)"
+            },
+            "exp": {
+                "description": "Calculate the exponential of all elements in the input array.",
+                "parameters": [
+                    {
+                        "name": "x",
+                        "type": "array_like",
+                        "description": "Input values."
+                    },
+                    {
+                        "name": "out",
+                        "type": "ndarray, optional",
+                        "description": "A location into which the result is stored. If provided, it must have a shape that the inputs broadcast to. If not provided or None, a freshly-allocated array is returned."
+                    },
+                    {
+                        "name": "where",
+                        "type": "array_like, optional",
+                        "description": "This condition is broadcast over the input. At locations where the condition is True, the out array will be set to the ufunc result. Elsewhere, the out array will retain its original value."
+                    }
+                ],
+                "example": "import numpy as np\n\narr = np.array([1, 2, 3])\nexp_values = np.exp(arr)"
+            },
+            "stack": {
+                "description": "Joins a sequence of arrays along a new axis.",
+                "parameters": [
+                    {
+                        "name": "arrays",
+                        "type": "sequence of array_like",
+                        "description": "Each array must have the same shape."
+                    },
+                    {
+                        "name": "axis",
+                        "type": "int, optional",
+                        "description": "The axis along which the arrays will be stacked."
+                    },
+                    {
+                        "name": "out",
+                        "type": "ndarray, optional",
+                        "description": "If provided, the destination to place the result."
+                    }
+                ],
+                "example": "import numpy as np\n\narr1 = np.array([1, 2, 3])\narr2 = np.array([4, 5, 6])\nstacked = np.stack((arr1, arr2), axis=0)"
+            },
+            "unique": {
+                "description": "Find the unique elements of an array.",
+                "parameters": [
+                    {
+                        "name": "ar",
+                        "type": "array_like",
+                        "description": "Input array."
+                    },
+                    {
+                        "name": "return_index",
+                        "type": "bool, optional",
+                        "description": "If True, also return the indices of the first occurrences of the unique values in the original array."
+                    },
+                    {
+                        "name": "return_inverse",
+                        "type": "bool, optional",
+                        "description": "If True, also return the indices of the unique array that can be used to reconstruct the original array."
+                    },
+                    {
+                        "name": "return_counts",
+                        "type": "bool, optional",
+                        "description": "If True, also return the number of times each unique value comes up in the original array."
+                    }
+                ],
+                "example": "import numpy as np\n\narr = np.array([1, 2, 2, 3, 3, 3])\nunique_values = np.unique(arr)"
+            },
+            "delete": {
+                "description": "Return a new array with sub-arrays along an axis deleted.",
+                "parameters": [
+                    {
+                        "name": "arr",
+                        "type": "array_like",
+                        "description": "Input array."
+                    },
+                    {
+                        "name": "obj",
+                        "type": "slice, int or array of ints",
+                        "description": "Indicates which sub-arrays to remove."
+                    },
+                    {
+                        "name": "axis",
+                        "type": "int, optional",
+                        "description": "The axis along which to delete the sub-arrays."
+                    }
+                ],
+                "example": "import numpy as np\n\narr = np.array([[1, 2], [3, 4], [5, 6]])\ndeleted = np.delete(arr, 1, 0)"
+            },
+            "add": {
+                "description": "Add arguments element-wise.",
+                "parameters": [
+                    {
+                        "name": "x1",
+                        "type": "array_like",
+                        "description": "The first input array."
+                    },
+                    {
+                        "name": "x2",
+                        "type": "array_like",
+                        "description": "The second input array. If x1.shape != x2.shape, they must be broadcastable to a common shape."
+                    },
+                    {
+                        "name": "out",
+                        "type": "ndarray, optional",
+                        "description": "A location into which the result is stored."
+                    },
+                    {
+                        "name": "where",
+                        "type": "array_like, optional",
+                        "description": "This condition is broadcast over the input. At locations where the condition is True, the out array will be set to the ufunc result."
+                    }
+                ],
+                "example": "import numpy as np\n\nresult = np.add([1, 2], [3, 4])"
+            },
+            "vstack": {
+                "description": "Stack arrays in sequence vertically (row wise).",
+                "parameters": [
+                    {
+                        "name": "tup",
+                        "type": "sequence of ndarrays",
+                        "description": "The arrays must have the same shape along all but the first axis."
+                    }
+                ],
+                "example": "import numpy as np\n\narr1 = np.array([1, 2, 3])\narr2 = np.array([4, 5, 6])\nstacked = np.vstack((arr1, arr2))"
+            },
+            "hstack": {
+                "description": "Stack arrays in sequence horizontally (column wise).",
+                "parameters": [
+                    {
+                        "name": "tup",
+                        "type": "sequence of ndarrays",
+                        "description": "The arrays must have the same shape along all but the second axis."
+                    }
+                ],
+                "example": "import numpy as np\n\narr1 = np.array([1, 2, 3])\narr2 = np.array([4, 5, 6])\nstacked = np.hstack((arr1, arr2))"
+            },
+            "squeeze": {
+                "description": "Remove single-dimensional entries from the shape of an array.",
+                "parameters": [
+                    {
+                        "name": "a",
+                        "type": "array_like",
+                        "description": "Input data."
+                    },
+                    {
+                        "name": "axis",
+                        "type": "int or tuple of ints, optional",
+                        "description": "Selects a subset of the single-dimensional entries in the shape."
+                    }
+                ],
+                "example": "import numpy as np\n\narr = np.array([[[1], [2], [3]]])\nsqueezed = np.squeeze(arr)"
+            },
+            "asarray": {
+                "description": "Convert the input to an array.",
+                "parameters": [
+                    {
+                        "name": "a",
+                        "type": "array_like",
+                        "description": "Input data, in any form that can be converted to an array."
+                    },
+                    {
+                        "name": "dtype",
+                        "type": "data-type, optional",
+                        "description": "By default, the data-type is inferred from the input data."
+                    },
+                    {
+                        "name": "order",
+                        "type": "str, optional",
+                        "description": "Whether to store multi-dimensional data in row-major (C-style) or column-major (Fortran-style) order in memory."
+                    }
+                ],
+                "example": "import numpy as np\n\narr = np.asarray([1, 2, 3])"
+            },
+            "split": {
+                "description": "Split an array into multiple sub-arrays.",
+                "parameters": [
+                    {
+                        "name": "ary",
+                        "type": "ndarray",
+                        "description": "Array to be divided into sub-arrays."
+                    },
+                    {
+                        "name": "indices_or_sections",
+                        "type": "int or 1-D array",
+                        "description": "If indices_or_sections is an integer, N, the array will be divided into N equal arrays along axis."
+                    },
+                    {
+                        "name": "axis",
+                        "type": "int, optional",
+                        "description": "The axis along which to split, default is 0."
+                    }
+                ],
+                "example": "import numpy as np\n\narr = np.array([1, 2, 3, 4, 5, 6])\nsplitted = np.split(arr, 3)"
+            },
+            "where": {
+                "description": "Return elements chosen from `x` or `y` depending on `condition`. The `condition` is evaluated element-wise and determines which elements to select from `x` or `y`.",
+                "parameters": [
+                    {
+                        "name": "condition",
+                        "type": "array_like, bool",
+                        "description": "Array of boolean values or condition to evaluate element-wise."
+                    },
+                    {
+                        "name": "x",
+                        "type": "array_like, optional",
+                        "description": "Values from which to choose. If omitted, `y` will be used."
+                    },
+                    {
+                        "name": "y",
+                        "type": "array_like, optional",
+                        "description": "Values from which to choose. If `x` is provided, `y` must also be provided."
+                    }
+                ],
+                "returns": {
+                    "type": "ndarray",
+                    "description": "An array with elements from `x` where `condition` is True, and from `y` elsewhere."
+                },
+                "example": "import numpy as np\n\ncondition = np.array([True, False, True])\nx = np.array([1, 2, 3])\ny = np.array([4, 5, 6])\nresult = np.where(condition, x, y)  # result will be array([1, 5, 3])"
+            }
+        }
+    }
+}

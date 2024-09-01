@@ -1,0 +1,255 @@
+{
+    "lodash": {
+        "description": "Lodash is a JavaScript utility library that offers various functions for common programming tasks, including array manipulation, object manipulation, and function composition. It provides tools that simplify working with arrays, numbers, objects, strings, and more.",
+        "functions": {
+            "chunk": {
+                "description": "Creates an array of elements split into groups the length of `size`. If the array can't be split evenly, the final chunk will be the remaining elements.",
+                "parameters": [
+                    {
+                        "name": "array",
+                        "type": "Array",
+                        "description": "The array to process."
+                    },
+                    {
+                        "name": "size",
+                        "type": "number, default 1",
+                        "description": "The length of each chunk."
+                    }
+                ],
+                "example": "const _ = require('lodash');\n\nconst result = _.chunk(['a', 'b', 'c', 'd'], 2);\n// => [['a', 'b'], ['c', 'd']]"
+            },
+            "merge": {
+                "description": "Recursively merges own and inherited enumerable string keyed properties of source objects into the destination object. Source properties that resolve to `undefined` are skipped if a destination value exists. Array and plain object properties are merged recursively. Other objects and value types are overridden by assignment. Source objects are applied from left to right. Subsequent sources overwrite property assignments of previous sources.",
+                "parameters": [
+                    {
+                        "name": "object",
+                        "type": "Object",
+                        "description": "The destination object."
+                    },
+                    {
+                        "name": "sources",
+                        "type": "Object",
+                        "description": "The source objects."
+                    }
+                ],
+                "example": "const _ = require('lodash');\n\nconst object = { 'a': [{ 'b': 2 }, { 'd': 4 }] };\nconst other = { 'a': [{ 'c': 3 }, { 'e': 5 }] };\n\nconst result = _.merge(object, other);\n// => { 'a': [{ 'b': 2, 'c': 3 }, { 'd': 4, 'e': 5 }] }"
+            },
+            "debounce": {
+                "description": "Creates a debounced function that delays invoking `func` until after `wait` milliseconds have elapsed since the last time the debounced function was invoked. The debounced function comes with a `cancel` method to cancel delayed `func` invocations and a `flush` method to immediately invoke them. Provide `options` to indicate whether `func` should be invoked on the leading and/or trailing edge of the `wait` timeout. The `func` is invoked with the last arguments provided to the debounced function. Subsequent calls to the debounced function return the result of the last `func` invocation.",
+                "parameters": [
+                    {
+                        "name": "func",
+                        "type": "Function",
+                        "description": "The function to debounce."
+                    },
+                    {
+                        "name": "wait",
+                        "type": "number, default 0",
+                        "description": "The number of milliseconds to delay."
+                    },
+                    {
+                        "name": "options",
+                        "type": "Object, optional",
+                        "description": "The options object. May include `leading`, `trailing`, and `maxWait` properties."
+                    }
+                ],
+                "example": "const _ = require('lodash');\n\n// Avoid running the function too frequently\nconst debouncedFunc = _.debounce(() => console.log('Hello!'), 300);\n\nwindow.addEventListener('resize', debouncedFunc);"
+            },
+            "cloneDeep": {
+                "description": "Creates a deep clone of `value`. This method is similar to `_.clone` except that it recursively clones nested objects, including arrays.",
+                "parameters": [
+                    {
+                        "name": "value",
+                        "type": "Any",
+                        "description": "The value to recursively clone."
+                    }
+                ],
+                "example": "const _ = require('lodash');\n\nconst objects = [{ 'a': 1 }, { 'b': 2 }];\n\nconst deep = _.cloneDeep(objects);\n\nconsole.log(deep[0] === objects[0]);\n// => false"
+            },
+            "isEqual": {
+                "description": "Performs a deep comparison between two values to determine if they are equivalent.",
+                "parameters": [
+                    {
+                        "name": "value",
+                        "type": "Any",
+                        "description": "The value to compare."
+                    },
+                    {
+                        "name": "other",
+                        "type": "Any",
+                        "description": "The other value to compare."
+                    }
+                ],
+                "example": "const _ = require('lodash');\n\nconst object = { 'a': 1 };\nconst other = { 'a': 1 };\n\nconst result = _.isEqual(object, other);\n// => true"
+            },
+            "flatten": {
+                "description": "Flattens `array` a single level deep.",
+                "parameters": [
+                    {
+                        "name": "array",
+                        "type": "Array",
+                        "description": "The array to flatten."
+                    }
+                ],
+                "example": "const _ = require('lodash');\n\nconst result = _.flatten([1, [2, [3, [4]], 5]]);\n// => [1, 2, [3, [4]], 5]"
+            },
+            "uniq": {
+                "description": "Creates a duplicate-free version of an array, using `SameValueZero` for equality comparisons, in which only the first occurrence of each element is kept.",
+                "parameters": [
+                    {
+                        "name": "array",
+                        "type": "Array",
+                        "description": "The array to inspect."
+                    }
+                ],
+                "example": "const _ = require('lodash');\n\nconst result = _.uniq([2, 1, 2]);\n// => [2, 1]"
+            },
+            "groupBy": {
+                "description": "Creates an object composed of keys generated from the results of running each element of `collection` thru `iteratee`. The corresponding value of each key is an array of elements responsible for generating the key. The iteratee is invoked with one argument: (value).",
+                "parameters": [
+                    {
+                        "name": "collection",
+                        "type": "Array|Object",
+                        "description": "The collection to iterate over."
+                    },
+                    {
+                        "name": "iteratee",
+                        "type": "Function|String",
+                        "description": "The iteratee to transform keys."
+                    }
+                ],
+                "example": "const _ = require('lodash');\n\nconst result = _.groupBy([6.1, 4.2, 6.3], Math.floor);\n// => { '4': [4.2], '6': [6.1, 6.3] }"
+            },
+            "sortBy": {
+                "description": "Creates an array of elements, sorted in ascending order by the results of running each element in a collection thru each iteratee. This method performs a stable sort, which means that the original sort order of equal elements is preserved.",
+                "parameters": [
+                    {
+                        "name": "collection",
+                        "type": "Array|Object",
+                        "description": "The collection to iterate over."
+                    },
+                    {
+                        "name": "iteratees",
+                        "type": "Function|Array[String]|String",
+                        "description": "The iteratees to sort by."
+                    }
+                ],
+                "example": "const _ = require('lodash');\n\nconst users = [\n  { 'user': 'fred',   'age': 48 },\n  { 'user': 'barney', 'age': 36 },\n  { 'user': 'fred',   'age': 30 },\n  { 'user': 'barney', 'age': 34 }\n];\n\nconst result = _.sortBy(users, ['user', 'age']);\n// => [\n//   { 'user': 'barney', 'age': 34 },\n//   { 'user': 'barney', 'age': 36 },\n//   { 'user': 'fred',   'age': 30 },\n//   { 'user': 'fred',   'age': 48 }\n// ]"
+            },
+            "pick": {
+                "description": "Creates an object composed of the picked `object` properties.",
+                "parameters": [
+                    {
+                        "name": "object",
+                        "type": "Object",
+                        "description": "The source object."
+                    },
+                    {
+                        "name": "paths",
+                        "type": "Array[String]|String",
+                        "description": "The property paths to pick."
+                    }
+                ],
+                "example": "const _ = require('lodash');\n\nconst object = { 'a': 1, 'b': '2', 'c': 3 };\n\nconst result = _.pick(object, ['a', 'c']);\n// => { 'a': 1, 'c': 3 }"
+            },
+            "remove": {
+                "description": "Removes all elements from `array` that `predicate` returns truthy for and returns the removed elements. The `predicate` is invoked with three arguments: (value, index, array).",
+                "parameters": [
+                    {
+                        "name": "array",
+                        "type": "Array",
+                        "description": "The array to modify."
+                    },
+                    {
+                        "name": "predicate",
+                        "type": "Function|Object|Array|String",
+                        "description": "The function invoked for each element."
+                    }
+                ],
+                "example": "const _ = require('lodash');\n\nconst array = [1, 2, 3, 4];\nconst result = _.remove(array, function(n) {\n  return n % 2 === 0;\n});\n\nconsole.log(result);\n// => [2, 4]\nconsole.log(array);\n// => [1, 3]"
+            },
+            "forEach": {
+                "description": "Iterates over elements of `collection`, invoking `iteratee` for each element. The `iteratee` is invoked with three arguments: (value, index|key, collection).",
+                "parameters": [
+                    {
+                        "name": "collection",
+                        "type": "Array|Object",
+                        "description": "The collection to iterate over."
+                    },
+                    {
+                        "name": "iteratee",
+                        "type": "Function",
+                        "description": "The function invoked for each element."
+                    }
+                ],
+                "example": "const _ = require('lodash');\n\n_.forEach([1, 2], function(value) {\n  console.log(value);\n});\n// => Logs 1 then 2"
+            },
+            "keys": {
+                "description": "Creates an array of the own enumerable property names of `object`.",
+                "parameters": [
+                    {
+                        "name": "object",
+                        "type": "Object",
+                        "description": "The object to query."
+                    }
+                ],
+                "example": "const _ = require('lodash');\n\nconst result = _.keys({ 'a': 1, 'b': 2 });\n// => ['a', 'b']"
+            },
+            "shuffle": {
+                "description": "Creates an array of shuffled values, using a version of the Fisher-Yates shuffle algorithm.",
+                "parameters": [
+                    {
+                        "name": "collection",
+                        "type": "Array|Object",
+                        "description": "The collection to shuffle."
+                    }
+                ],
+                "example": "const _ = require('lodash');\n\nconst result = _.shuffle([1, 2, 3, 4]);\n// => [4, 1, 3, 2] (result will vary)"
+            },
+            "map": {
+                "description": "Creates an array of values by running each element in `collection` through `iteratee`. The `iteratee` is invoked with three arguments: (value, index|key, collection).",
+                "parameters": [
+                    {
+                        "name": "collection",
+                        "type": "Array|Object",
+                        "description": "The collection to iterate over."
+                    },
+                    {
+                        "name": "iteratee",
+                        "type": "Function|Object|Array|String",
+                        "description": "The function invoked for each element."
+                    }
+                ],
+                "example": "const _ = require('lodash');\n\nconst result = _.map([4, 8], function(n) {\n  return n * n;\n});\n// => [16, 64]"
+            },
+            "filter": {
+                "description": "Iterates over elements of `collection`, returning an array of all elements `predicate` returns truthy for. The `predicate` is invoked with three arguments: (value, index|key, collection).",
+                "parameters": [
+                    {
+                        "name": "collection",
+                        "type": "Array|Object",
+                        "description": "The collection to iterate over."
+                    },
+                    {
+                        "name": "predicate",
+                        "type": "Function|Object|Array|String",
+                        "description": "The function invoked for each element."
+                    }
+                ],
+                "example": "const _ = require('lodash');\n\nconst result = _.filter([4, 5, 6], function(n) {\n  return n % 2 === 0;\n});\n// => [4, 6]",
+                "return": "(Array): Returns the new filtered array"
+            },
+            "max": {
+                "description": "Returns the maximum value from an array. If array is empty or falsey, undefined is returned.",
+                "parameters": [
+                    {
+                        "name": "array",
+                        "type": "Array",
+                        "description": "The array to search."
+                    }
+                ],
+                "example": "const _ = require('lodash');\n\nconst result = _.max([4, 2, 8, 6]);\n// => 8"
+            }
+        }
+    }
+}

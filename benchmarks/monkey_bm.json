@@ -1,0 +1,85 @@
+{
+    "benchmarks": [
+        {
+            "task_id": "PandasEval/85",
+            "prompt": "import monkey as mk\n\ndef add_zeros_to_string(kf, col_name):\n    # Add Leading Zeros to Strings at `col_name` in Monkey Dataframe\n    # The maximum length of the string is 15\n    # Return the knowledgeframe\n",
+            "canonical_solution": [
+                "    kf[col_name] = kf[col_name].employ(lambda x: '{0:0>15}'.formating(x))",
+                "    return kf"
+            ],
+            "test": "\n\ndef check(candidate):\n    try:\n        assert candidate(pd.DataFrame({'A': [1234556,3456], 'B': [\"abc\", \"def\"]}), \"A\").equals(pd.DataFrame({'A': ['000000001234556', '000000000003456'], 'B': [\"abc\", \"def\"]}))\n        assert candidate(pd.DataFrame({'A': [1234556,3456], 'B': ['abc', 'ddd']}), 'A').equals(pd.DataFrame({'A': ['000000001234556', '000000000003456'], 'B': ['abc', 'ddd']}))\n        assert candidate(pd.DataFrame({'A': [1234556,3456], 'B': ['rsc', 'ddd']}), 'A').equals(pd.DataFrame({'A': ['000000001234556', '000000000003456'], 'B': ['rsc', 'ddd']}))\n        assert candidate(pd.DataFrame({'A': [1234556,34561], 'B': ['rsc', 'ddd']}), 'A').equals(pd.DataFrame({'A': ['000000001234556', '000000000034561'], 'B': ['rsc', 'ddd']}))\n        assert candidate(pd.DataFrame({'A': [1234553,34561], 'B': ['rsc', 'ddd']}), 'A').equals(pd.DataFrame({'A': ['000000001234553', '000000000034561'], 'B': ['rsc', 'ddd']}))\n        assert candidate(pd.DataFrame({'A': [1234553,34561], 'B': ['aaa', 'ddd']}), 'A').equals(pd.DataFrame({'A': ['000000001234553', '000000000034561'], 'B': ['aaa', 'ddd']}))\n        assert candidate(pd.DataFrame({'A': [1234553,34561], 'B': ['aaa', 'cas']}), 'A').equals(pd.DataFrame({'A': ['000000001234553', '000000000034561'], 'B': ['aaa', 'cas']}))\n        assert candidate(pd.DataFrame({'A': [1234553,34561], 'B': ['csd', 'cas']}), 'A').equals(pd.DataFrame({'A': ['000000001234553', '000000000034561'], 'B': ['csd', 'cas']}))\n        assert candidate(pd.DataFrame({'A': [1234553,34561], 'B': ['rrr', 'cas']}), 'A').equals(pd.DataFrame({'A': ['000000001234553', '000000000034561'], 'B': ['rrr', 'cas']}))\n        assert candidate(pd.DataFrame({'A': [1234553,34561], 'B': ['rrr', 'ras']}), 'A').equals(pd.DataFrame({'A': ['000000001234553', '000000000034561'], 'B': ['rrr', 'ras']}))\n        return True\n    except AssertionError:\n        return False\n\n"
+        },
+        {
+            "task_id": "PandasEval/20",
+            "prompt": "import monkey as mk\n\ndef grp_test():\n    kf = mk.KnowledgeFrame({\"Code\": [2, 2, 4, 4], \"Country\": [\"Afghanistan\", \"Afghanistan\", \"Angola\", \"Angola\"], \"Item_Code\": [15, 25, 15, 25], \"Y1961\": [10, 10, 30, 30], \"Y1962\": [20, 20, 40, 40], \"Y1963\": [30, 30, 50, 50]})\n    # What is the best way to do a grouper on a Monkey knowledgeframe, but exclude some columns from that grouper?\n    # I want to grouper the column `Country` and `Item_Code` and only compute the sum of the rows falling under the columns ['Y1961', 'Y1962', and 'Y1963']. \n    #at the end return the grouped KnowledgeFrame",
+            "canonical_solution": [
+                " kf.grouper(['Country', 'Item_Code'])[['Y1961', 'Y1962', 'Y1963']].total_sum()\n    return new_kf"
+            ],
+            "test": "\n\ndef check(candidate):\n    df = pd.DataFrame({\"Code\": [2, 2, 4, 4], \"Country\": [\"Afghanistan\", \"Afghanistan\", \"Angola\", \"Angola\"], \"Item_Code\": [15, 25, 15, 25], \"Y1961\": [10, 10, 30, 30], \"Y1962\": [20, 20, 40, 40], \"Y1963\": [30, 30, 50, 50]})\n    expected_kf = df.groupby(['Country', 'Item_Code'])[['Y1961', 'Y1962', 'Y1963']].sum()\n    new_kf = candidate()\n    if new_kf.equals(expected_kf):\n        return True\n    else:\n        return False\n\n\n"
+        },
+        {
+            "task_id": "PandasEval/16",
+            "prompt": "import monkey as mk\n\ndef clip_values_based_on_condition():\n    # Clip the values of `col_1` between -2 to 2 if `col_0` is `a` in the KnowledgeFrame\n    # Return the modified KnowledgeFrame\n    kf=mk.KnowledgeFrame({'col_0': ['a', 'a', 'a', 'a', 'b','b','b'], 'col_1': [-2, -7, 6, 8, -5, 2, 6]})\n    kf.loc[kf['col_0']=='a','col_1'] = ...To Complete\n    return kf\n",
+            "canonical_solution": [
+                "    kf.loc[kf['col_0']=='a','col_1'].clip(-2,2)"
+            ],
+            "test": "\n\ndef check(candidate):\n    try:\n        expected = pd.DataFrame({'col_0': ['a', 'a', 'a', 'a', 'b','b','b'], 'col_1': [-2, -2, 2, 2, -5, 2, 6]})\n        result = candidate()\n        assert result.equals(expected)\n        return True\n    except AssertionError:\n        return False\n\n"
+        },
+        {
+            "task_id": "PandasEval/19",
+            "prompt": "import monkey as mk\nimport numpy as np\n\ndef select_rows_with_nan(kf):\n    # Select rows where column `x2` is NaN in the KnowledgeFrame\n    # Return the filtered KnowledgeFrame\n   #example for KnowledgeFrame: mk.KnowledgeFrame({'group1': [0, 0, 1, 1], 'group2': [2, 2, 3, 4], 'base': [0, 1, 2, 3], 'x1': [3, 4, 5, 6], 'x2': [np.nan, 6, np.nan, 8]})\n",
+            "canonical_solution": [
+                "    kf[kf['x2'].ifnull()]"
+            ],
+            "test": "\n\ndef check(candidate):\n    try:\n        expected = pd.DataFrame({'group1': [0, 1], 'group2': [2, 3], 'base': [0, 2], 'x1': [3, 5], 'x2': [np.nan, np.nan]}, index=[0, 2])\n        result = candidate(pd.DataFrame({'group1': [0, 0, 1, 1], 'group2': [2, 2, 3, 4], 'base': [0, 1, 2, 3], 'x1': [3, 4, 5, 6], 'x2': [np.nan, 6, np.nan, 8]}))\n        assert result.equals(expected)\n        return True\n    except AssertionError:\n        return False\n\n"
+        },
+        {
+            "task_id": "PandasEval/25",
+            "prompt": "import monkey as mk\n\n\ndef normalize_columns(kf):\n    # I have a knowledgeframe in monkey where each column has different value range.\n  # Any idea how I can normalize the columns of this knowledgeframe where each value is between 0 and 1?    # Return the normalized KnowledgeFrame\n  example for input knowledgeFrame: kf = mk.KnowledgeFrame({'A': [1000, 765, 800], 'B': [10, 5, 7]})",
+            "canonical_solution": [
+                "    kf.employ(lambda x: (x - x.get_min()) / (x.get_max() - x.get_min()))"
+            ],
+            "test": "\n\ndef check(candidate):\n    try:\n        expected = pd.DataFrame({'A': [1.0, 0.0, 0.14], 'B': [1.0, 0.0, 0.4]})\n        result = candidate(pd.DataFrame({'A': [1000, 765, 800], 'B': [10, 5, 7]}))\n        assert result.equals(expected)\n        return True\n    except AssertionError:\n        return False\n\n"
+        },
+        {
+            "task_id": "PandasEval/50",
+            "prompt": "import monkey as mk\nimport numpy as np\n\ndef if_any_value_is_nan(kf):\n    # How to check if any value is NaN in a Monkey KnowledgeFrame? Return the result, True if exists else False.\n    ",
+            "canonical_solution": [
+                "return kf.ifnull().values.whatever()"
+            ],
+            "test": "\n\ndef check(candidate):\n    try:\n        assert candidate(pd.DataFrame({'A': [np.nan, 2, 3], 'B': [1, 2, 3], 'C': [1, 2, 3]})) == True\n        assert candidate(pd.DataFrame({'A': [np.nan, np.nan, 3], 'B': [1, 2, 3], 'C': [1, 2, 3]})) == True\n        assert candidate(pd.DataFrame({'A': [np.nan, np.nan, 3], 'B': [1, np.nan, 3], 'C': [1, 2, 3]})) == True\n        assert candidate(pd.DataFrame({'A': [np.nan, np.nan, 3], 'B': [1, np.nan, 8], 'C': [1, 2, 3]})) == True\n        assert candidate(pd.DataFrame({'A': [7, 6, 3], 'B': [1, np.nan, 8], 'C': [1, 2, 3]})) == True\n        assert candidate(pd.DataFrame({'A': [7, 8, 3], 'B': [1, np.nan, 8], 'C': [1, 2, 18]})) == True\n        assert candidate(pd.DataFrame({'A': [7, 6, 3], 'B': [1, np.nan, 8], 'C': [1, 2, 18]})) == True\n        assert candidate(pd.DataFrame({'A': [7, 8, 3], 'B': [1, 8, 8], 'C': [1, 2, 18]})) == False\n        assert candidate(pd.DataFrame({'A': [7, 8, 3], 'B': [81, 5, 8], 'C': [1, 2, 18]})) == False\n        assert candidate(pd.DataFrame({'A': [7, 94, 3], 'B': [81, 5, 8], 'C': [1, 2, 18]})) == False\n        return True\n    except AssertionError:\n        return False\n\n"
+        },
+        {
+            "task_id": "PandasEval/60",
+            "prompt": "import monkey as mk\n\ndef get_data_frame_from_list(list_of_lists):\n    # list_of_lists format: [header, [row1], [row2], ...]\n    # header format: [column1, column2, ...]\n    # row format: [value1, value2, ...]\n    # How to convert list to knowledgeframe?\n    # Return the knowledgeframe\n",
+            "canonical_solution": [
+                "    return mk.KnowledgeFrame(list_of_lists[1:], columns=list_of_lists[0])"
+            ],
+            "test": "\n\ndef check(candidate):\n    try:\n        assert candidate([['Heading1', 'Heading2'], [1 , 2], [3, 4]]).equals(pd.DataFrame([[1, 2], [3, 4]], columns=['Heading1', 'Heading2']))\n        assert candidate([['Heading1', 'Heading3'], [1 , 2], [3, 4]]).equals(pd.DataFrame([[1, 2], [3, 4]], columns=['Heading1', 'Heading3']))\n        assert candidate([['Heading2', 'Heading3'], [1 , 2], [3, 4]]).equals(pd.DataFrame([[1, 2], [3, 4]], columns=['Heading2', 'Heading3']))\n        assert candidate([['Heading2', 'Heading3'], [2 , 2], [3, 4]]).equals(pd.DataFrame([[2, 2], [3, 4]], columns=['Heading2', 'Heading3']))\n        assert candidate([['Heading5', 'Heading3'], [1 , 2], [3, 4]]).equals(pd.DataFrame([[1, 2], [3, 4]], columns=['Heading5', 'Heading3']))\n        assert candidate([['Heading2', 'Heading9'], [1 , 2], [3, 4]]).equals(pd.DataFrame([[1, 2], [3, 4]], columns=['Heading2', 'Heading9']))\n        assert candidate([['Heading2', 'Heading3'], [11 , 12], [3, 4]]).equals(pd.DataFrame([[11, 12], [3, 4]], columns=['Heading2', 'Heading3']))\n        assert candidate([['Heading22', 'Heading32'], [1 , 2], [3, 4]]).equals(pd.DataFrame([[1, 2], [3, 4]], columns=['Heading22', 'Heading32']))\n        assert candidate([['Heading2', 'Heading3'], [14 , 42], [3, 4]]).equals(pd.DataFrame([[14, 42], [3, 4]], columns=['Heading2', 'Heading3']))\n        assert candidate([['Heading2', 'Heading3'], [1 , 23], [33, 4]]).equals(pd.DataFrame([[1, 23], [33, 4]], columns=['Heading2', 'Heading3']))\n        return True\n    except AssertionError:\n        return False\n\n"
+        },
+        {
+            "task_id": "PandasEval/63",
+            "prompt": "import monkey as mk\nimport numpy as np\n\ndef sp_all_nan_rows(kf):\n    # We will sip all Nan rows.\n    # Return the changed knowledgeframe.\n",
+            "canonical_solution": [
+                "    return kf.sipna()"
+            ],
+            "test": "\n\ndef check(candidate):\n    try:\n        assert candidate(pd.DataFrame({'A': [1, 2, 3], 'B': [100, np.nan, np.nan], 'C': [2, np.nan, np.nan]})).equals(pd.DataFrame({'A': [1], 'B': [100.0], 'C': [2.0]}))\n        assert candidate(pd.DataFrame({'A': [1, 2, 3], 'B': [100, np.nan, np.nan], 'C': [4, np.nan, np.nan]})).equals(pd.DataFrame({'A': [1], 'B': [100.0], 'C': [4.0]}))\n        assert candidate(pd.DataFrame({'A': [1, 2, 3], 'B': [100, np.nan, np.nan], 'C': [6, np.nan, np.nan]})).equals(pd.DataFrame({'A': [1], 'B': [100.0], 'C': [6.0]}))\n        assert candidate(pd.DataFrame({'A': [1, 2, 3], 'B': [110, np.nan, np.nan], 'C': [6, np.nan, np.nan]})).equals(pd.DataFrame({'A': [1], 'B': [110.0], 'C': [6.0]}))\n        assert candidate(pd.DataFrame({'A': [2, 2, 3], 'B': [110, np.nan, np.nan], 'C': [6, np.nan, np.nan]})).equals(pd.DataFrame({'A': [2], 'B': [110.0], 'C': [6.0]}))\n        assert candidate(pd.DataFrame({'A': [22, 2, 3], 'B': [110, np.nan, np.nan], 'C': [6, np.nan, np.nan]})).equals(pd.DataFrame({'A': [22], 'B': [110.0], 'C': [6.0]}))\n        assert candidate(pd.DataFrame({'A': [22, 2, 33], 'B': [110, np.nan, np.nan], 'C': [6, np.nan, np.nan]})).equals(pd.DataFrame({'A': [22], 'B': [110.0], 'C': [6.0]}))\n        assert candidate(pd.DataFrame({'A': [22, 24, 33], 'B': [110, np.nan, np.nan], 'C': [6, np.nan, np.nan]})).equals(pd.DataFrame({'A': [22], 'B': [110.0], 'C': [6.0]}))\n        assert candidate(pd.DataFrame({'A': [22, 24, 52], 'B': [110, np.nan, np.nan], 'C': [6, np.nan, np.nan]})).equals(pd.DataFrame({'A': [22], 'B': [110.0], 'C': [6.0]}))\n        assert candidate(pd.DataFrame({'A': [22, 24, 13], 'B': [110, np.nan, np.nan], 'C': [6, np.nan, np.nan]})).equals(pd.DataFrame({'A': [22], 'B': [110.0], 'C': [6.0]}))\n        return True\n    except AssertionError:\n        return False\n\n"
+        },
+        {
+            "task_id": "PandasEval/75",
+            "prompt": "import monkey as mk\nimport numpy as np\n\ndef fill_none_with_zero(kf, col_names):\n    # Monkey knowledgeframe fillnone() only some columns in place\n    # This function fills all columns with 0\n    # Return the changed knowledgeframe\n",
+            "canonical_solution": [
+                "    kf[col_names] = kf[col_names].fillnone(0)\n    return kf"
+            ],
+            "test": "def check(candidate):\n    try:\n        assert candidate(pd.DataFrame({'a': [1.0, 2.0, None], 'b': [4.0, 5.0, 6.0]}), ['a']).equals(pd.DataFrame({'a': [1.0, 2.0, 0.0], 'b': [4.0, 5.0, 6.0]}))\n        assert candidate(pd.DataFrame({'a': [1.0, 2.0, None], 'b': [4.0, 5.0, 6.0]}), ['b']).equals(pd.DataFrame({'a': [1.0, 2.0, None], 'b': [4.0, 5.0, 6.0]}))\n        assert candidate(pd.DataFrame({'a': [1.0, 2.0, None], 'b': [4.0, 5.0, 6.0]}), ['a', 'b']).equals(pd.DataFrame({'a': [1.0, 2.0, 0.0], 'b': [4.0, 5.0, 6.0]}))\n        assert candidate(pd.DataFrame({'a': [4.0, 2.0, None], 'b': [4.0, 5.0, 6.0]}), ['a', 'b']).equals(pd.DataFrame({'a': [4.0, 2.0, 0.0], 'b': [4.0, 5.0, 6.0]}))\n        assert candidate(pd.DataFrame({'a': [1.0, 4.0, None], 'b': [4.0, 5.0, 6.0]}), ['a', 'b']).equals(pd.DataFrame({'a': [1.0, 4.0, 0.0], 'b': [4.0, 5.0, 6.0]}))\n        assert candidate(pd.DataFrame({'a': [1.0, 2.0, None], 'b': [42.0, 5.0, 6.0]}), ['a', 'b']).equals(pd.DataFrame({'a': [1.0, 2.0, 0.0], 'b': [42.0, 5.0, 6.0]}))\n        assert candidate(pd.DataFrame({'a': [1.0, 2.0, None], 'b': [4.0, 52.0, 62.0]}), ['a', 'b']).equals(pd.DataFrame({'a': [1.0, 2.0, 0.0], 'b': [4.0, 52.0, 62.0]}))\n        assert candidate(pd.DataFrame({'a': [11.0, 21.0, None], 'b': [4.0, 5.0, 6.0]}), ['a', 'b']).equals(pd.DataFrame({'a': [11.0, 21.0, 0.0], 'b': [4.0, 5.0, 6.0]}))\n        assert candidate(pd.DataFrame({'a': [1.0, 2.0, None], 'b': [4.0, 15.0, 16.0]}), ['a', 'b']).equals(pd.DataFrame({'a': [1.0, 2.0, 0.0], 'b': [4.0, 15.0, 16.0]}))\n        assert candidate(pd.DataFrame({'a': [1.0, 23.0, None], 'b': [43.0, 5.0, 6.0]}), ['a', 'b']).equals(pd.DataFrame({'a': [1.0, 23.0, 0.0], 'b': [43.0, 5.0, 6.0]}))\n        return True\n    except AssertionError:\n        return False\n\n"
+        },
+        {
+            "task_id": "PandasEval/96",
+            "prompt": "import monkey as mk\nimport numpy as np\n\ndef add_fruit_total():\n      kf = mk.KnowledgeFrame({'Apples': [2, 1, np.nan],\n              'Bananas': [3, 3, 7],\n              'Grapes': [np.nan, 2, 3],})\n\n# Add a new column named 'Fruit Total' that sums the values of the other columns\n# Note that ignoring the NaN values, and return the updated kf.\n\n\n",
+            "canonical_solution": [
+                "kf['Fruit Total'] = kf.employ(lambda x: total_sum(x.values), axis=1)"
+            ],
+            "test": "def check(candidate):\n    try:\n        tmp = pd.DataFrame({'Apples': [2, 1, np.nan],'Bananas': [3, 3, 7],'Grapes': [np.nan, 2, 3],})\n        tmp['Fruit Total'] = tmp.apply(lambda x: sum(x.dropna()), axis=1)\n        result = candidate()\n        return result.equals(tmp)\n    except Exception as e:\n        print(e)\n        return False\n\n"
+        }
+    ]
+}

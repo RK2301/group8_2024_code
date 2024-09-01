@@ -1,0 +1,290 @@
+{
+    "danfo": {
+        "description": "Danfo.js is a JavaScript library that provides high-level data structures and data analysis tools, similar to pandas in Python. It offers a variety of functions for data manipulation and analysis, including handling missing data, reading and writing data, and performing operations on DataFrames and Series.",
+        "functions": {
+            "readCSV": {
+                "description": "Reads a comma-separated values (CSV) file into a DataFrame.",
+                "parameters": [
+                    {
+                        "name": "filepath",
+                        "type": "string",
+                        "description": "The path to the CSV file to read."
+                    },
+                    {
+                        "name": "header",
+                        "type": "boolean or integer, default true",
+                        "description": "Indicates whether the file contains a header row."
+                    },
+                    {
+                        "name": "dtype",
+                        "type": "object, optional",
+                        "description": "Data types for the columns. E.g., { 'col1': 'int32', 'col2': 'float32' }."
+                    },
+                    {
+                        "name": "na_values",
+                        "type": "array, string, or object, default null",
+                        "description": "Additional strings to recognize as NA/NaN."
+                    }
+                ],
+                "example": "const df = dfd.readCSV('path/to/file.csv');"
+            },
+            "DataFrame": {
+                "description": "Creates a DataFrame, a 2-dimensional labeled data structure with columns of potentially different types.",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "type": "array or object",
+                        "description": "The data to be stored in the DataFrame."
+                    },
+                    {
+                        "name": "columns",
+                        "type": "array of strings, optional",
+                        "description": "Column names for the DataFrame."
+                    },
+                    {
+                        "name": "index",
+                        "type": "array of strings or numbers, optional",
+                        "description": "Index labels for the DataFrame."
+                    }
+                ],
+                "example": "const df = new dfd.DataFrame([[1, 2], [3, 4]], {columns: ['A', 'B']});"
+            },
+            "Series": {
+                "description": "Creates a Series, a one-dimensional array-like object containing an array of data and an associated array of data labels.",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "type": "array or object",
+                        "description": "The data to be stored in the Series."
+                    },
+                    {
+                        "name": "index",
+                        "type": "array of strings or numbers, optional",
+                        "description": "Index labels for the Series."
+                    }
+                ],
+                "example": "const series = new dfd.Series([1, 2, 3, 4]);"
+            },
+            "merge": {
+                "description": "Merges DataFrame objects with a database-style join.",
+                "parameters": [
+                    {
+                        "name": "left",
+                        "type": "DataFrame",
+                        "description": "The first DataFrame to merge."
+                    },
+                    {
+                        "name": "right",
+                        "type": "DataFrame",
+                        "description": "The second DataFrame to merge."
+                    },
+                    {
+                        "name": "on",
+                        "type": "array",
+                        "description": "Column names to join on. Must be found in both the left and right DataFrame and/or Series objects"
+                    },
+                    {
+                        "name": "how",
+                        "type": "string, default 'inner'",
+                        "description": "Type of merge to be performed. One of 'left', 'right', 'outer', 'inner'. Defaults to 'inner'"
+                    }
+                ],
+                "example": "const df3 = dfd.merge({left: df1, right: df2, on: ['key1'], how: 'inner'});"
+            },
+            "concat": {
+                "description": "Concatenate DataFrames and Series along an axis",
+                "parameters": [
+                    {
+                        "name": "dfList",
+                        "type": "array of DataFrame or Series",
+                        "description": "List of DataFrames or Series to concatenate together."
+                    },
+                    {
+                        "name": "axis",
+                        "type": "integer, default 1",
+                        "description": "One of 0 or 1. The axis on which to perform concatenation. Specified axis must align in both Objects"
+                    }
+                ],
+                "example": "let data = [['K0', 'k0', 'A0', 'B0'], ['k0', 'K1', 'A1', 'B1'], 'K1', 'K0', 'A2', 'B2'], ['K2', 'K2', 'A3', 'B3']]; let data2 = [['K0', 'k0', 'C0', 'D0'], ['K1', 'K0', 'C1', 'D1'], ['K1', 'K0', 'C2', 'D2'], ['K2', 'K0', 'C3', 'D3']];  let colum1 = ['Key1', 'Key2', 'A', 'B']; let colum2 = ['Key1', 'Key2', 'A', 'D']; let df1 = new dfd.DataFrame(data, { columns: colum1 }); let df2 = new dfd.DataFrame(data2, { columns: colum2 }); let com_df = dfd.concat({ dfList: [df1, df2], axis: 1 })"
+            },
+            "toCSV": {
+                "description": "Converts a DataFrame to a CSV file.",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "type": "DataFrame",
+                        "description": "The DataFrame to be converted to CSV."
+                    },
+                    {
+                        "name": "options",
+                        "type": "object, optional",
+                        "description": "Options to customize the CSV output. Properties can include 'filePath' (string) to specify the file path, and 'header' (boolean, default true) to include or exclude headers."
+                    }
+                ],
+                "example": "dfd.toCSV(df, {filePath: 'path/to/save.csv', header: true});",
+                "returns": "A CSV file saved at the specified path."
+            },
+            "dropNa": {
+                "description": "Removes missing values  (NaNs, undefined, null) from a DataFrame or Series.",
+                "parameters": [
+                    {
+                        "name": "axis",
+                        "type": "integer, optional, default 1",
+                        "description": "0 or 1. If 0, drop columns with NaNs, if 1, drop rows with NaNs"
+                    },
+                    {
+                        "name": "inplace",
+                        "type": "boolean, optional, default false",
+                        "description": "If true, the operation will be performed in place and will not return a new DataFrame or Series."
+                    }
+                ],
+                "example": "df.dropNa({axis: 0, inplace: false});",
+                "returns": "A new DataFrame or Series with missing values dropped."
+            },
+            "sortValues": {
+                "description": "Sort a Dataframe in ascending or descending order by a specified column name.",
+                "parameters": [
+                    {
+                        "name": "by",
+                        "type": "Object",
+                        "description": "This key can be either a single column name or a single array of the same length as the calling DataFrame."
+                    },
+                    {
+                        "name": "ascending",
+                        "type": "boolean, optional, default true",
+                        "description": "Sort ascending vs. descending."
+                    },
+                    {
+                        "name": "inplace",
+                        "type": "boolean, optional, default false",
+                        "description": "If true, the operation is performed in place and the DataFrame is modified. Otherwise, a new DataFrame is returned."
+                    }
+                ],
+                "example": "df.sortValues('column_name', {ascending: false, inplace: true});",
+                "returns": "A sorted DataFrame if inplace is false; otherwise, returns null."
+            },
+            "iloc": {
+                "description": "Selects a subset of a DataFrame or Series by integer location.",
+                "parameters": [
+                    {
+                        "name": "rows",
+                        "type": "integer or array of integers",
+                        "description": "The row index(es) to select."
+                    },
+                    {
+                        "name": "columns",
+                        "type": "integer or array of integers, optional",
+                        "description": "The column index(es) to select."
+                    }
+                ],
+                "example": "df.iloc({rows: [0,1,3]}); df.iloc({columns: ['1:']}); df.iloc({rows: [0,3], columns: [1,2]})",
+                "returns": "A DataFrame or Series with the selected rows and columns."
+            },
+            "head": {
+                "description": "Returns the first n rows of a DataFrame or Series.",
+                "parameters": [
+                    {
+                        "name": "n",
+                        "type": "integer, optional, default 5",
+                        "description": "The number of rows to return."
+                    }
+                ],
+                "example": "df.head(3);",
+                "returns": "The first n rows of the DataFrame or Series."
+            },
+            "mean": {
+                "description": "Returns the mean of the values for the requested axis",
+                "parameters": [
+                    {
+                        "name": "axis",
+                        "type": "0 or 1",
+                        "description": "optinal, axis: 0 or 1. If 0, compute the mean column-wise, if 1, row-wise. Defaults to 1",
+                        "default": "1"
+                    }
+                ],
+                "example": "data = [[11, 20, 3], [1, 15, 6], [2, 30, 40], [2, 89, 78]]; cols = ['A', 'B', 'C']; let df = new dfd.DataFrame(data); df.mean().print()",
+                "return": "Series, in the example it will print: 0 -> 11.3333 1 -> 7.3333 2 -> 24 3 -> 56.333"
+            },
+            "fillNa": {
+                "description": "Fill NaN/undefined values using the specified method. Detect missing values for an array-like object.",
+                "parameters": [
+                    {
+                        "name": "values",
+                        "type": "Array | Scalar",
+                        "description": "The list of value(s) to use for replacement."
+                    },
+                    {
+                        "name": "columns",
+                        "type": "array, optional",
+                        "description": "The columns to fill the missing data in. If not specified, all columns will be considered."
+                    },
+                    {
+                        "name": "inplace",
+                        "type": "boolean, optional, default false",
+                        "description": "If true, fills the missing values in place. Otherwise, returns a new DataFrame.",
+                        "default": "{inplace:false}"
+                    }
+                ],
+                "example": "let data = { 'Name': ['Apples', 'Mango', 'Banana', undefined], 'Count': [NaN, 5, NaN, 10],'Price': [200, 300, 40, 250]}; let df = new dfd.DataFrame(data); let values = ['Apples', df['Count'].mean()]; let df_filled = df.fillNa(values, { columns: ['Name', 'Count'] })",
+                "returns": "A DataFrame with missing values filled, if inplace is false."
+            },
+            "groupby": {
+                "description": "Group DataFrame using a mapper or by a Series of columns.",
+                "parameters": [
+                    {
+                        "name": "columns",
+                        "type": "Array",
+                        "description": "The names of a column(s) in the DataFrame to group by"
+                    }
+                ],
+                "example": "let data = [['Pear', 2, 3], ['Pear', 5, 6], ['Apple', 30, 40], ['Apple', 89, 78]]; let cols = ['A', 'B', 'C']; let df = new dfd.DataFrame(data, { columns: cols }); let group_df = df.groupby(['A'])",
+                "returns": "// ouput Groupby { colDict: { Pear: { A: [Array], B: [Array], C: [Array] }, Apple: { A: [Array], B: [Array], C: [Array] } }, keyToValue: { Pear: [ 'Pear' ], Apple: [ 'Apple' ] }, keyCol: [ 'A' ], data: [ [ 'Pear', 2, 3 ], [ 'Pear', 5, 6 ], [ 'Apple', 30, 40 ], [ 'Apple', 89, 78 ] ], columnName: [ 'A', 'B', 'C' ], colDtype: [ 'string' ], colIndex: [ 0 ] }"
+            },
+            "rename": {
+                "description": "Change axis labels. Object values must be unique (1-to-1). Labels not contained in a dict / Series will be left as-is. Extra labels listed don’t throw an error.",
+                "parameters": [
+                    {
+                        "name": "mapper",
+                        "type": "object",
+                        "description": "Labels and transformations to apply to that axis’ values."
+                    },
+                    {
+                        "name": "axis",
+                        "type": "integer, optional, default 1",
+                        "description": "Axis to target. 0 for index, 1 for columns."
+                    },
+                    {
+                        "name": "inplace",
+                        "type": "boolean, optional, default false",
+                        "description": "If true, performs the operation in place."
+                    }
+                ],
+                "example": "let data = { 'A': [-20, 30, 47.3], 'B': [34, -4, 5], 'C': [20, 2, 30] }; let df = new dfd.DataFrame(data); df.rename({ 'A': 'new_name' }, { inplace: true })",
+                "returns": "A DataFrame with renamed labels, if inplace is false."
+            },
+            "drop": {
+                "description": "Drop specified labels from rows or columns.Remove rows or columns by specifying label names and corresponding axis",
+                "parameters": [
+                    {
+                        "name": "columns",
+                        "type": "array, optional",
+                        "description": "Array of column names to drop."
+                    },
+                    {
+                        "name": "index",
+                        "type": "Array",
+                        "description": "Array of index labels to drop."
+                    },
+                    {
+                        "name": "inplace",
+                        "type": "Boolean",
+                        "description": "Boolean indicating whether to perform the operation inplace or not. Defaults to false",
+                        "default": "false"
+                    }
+                ],
+                "example": "let data = { 'A': [-20, 30, 47.3, -20], 'B': [34, -4, 5, 6] , 'C': [20, 20, 30, 30], 'D': ['a', 'b', 'c', 'c'] }; let df = new dfd.DataFrame(data); df.drop({ columns: ['C', 'B'], inplace: true });",
+                "returns": "A DataFrame with specified rows/columns dropped, if inplace is false."
+            }
+        }
+    }
+}

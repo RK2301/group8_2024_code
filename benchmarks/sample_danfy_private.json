@@ -1,0 +1,110 @@
+{
+    "benchmarks": [
+        {
+            "task_id": "DanfoEval/1",
+            "prompt": "import * as dfd from 'danfojs';\nimport * as danfy from 'danfy';\n\nfunction mergeDF(db1, db2, key) {\n    // Merge two DataBoards on the specified key\n    // Use an inner join\n    // Return the merged DataBoard\n}",
+            "canonical_solution": [
+                "    return danfy.combine(db1, db2, {on: key, how: 'inner'});"
+            ],
+            "test": "\n\nfunction check(candidate) {\n    let allTestsPassed = true;\n    try {\n        let db1 = new dfd.DataFrame({A: ['foo', 'bar', 'baz'], B: [1, 2, 3]});\n        let db2 = new dfd.DataFrame({A: ['foo', 'bar', 'qux'], C: [4, 5, 6]});\n        let result = candidate(db1, db2, 'A');\n        let expected = new dfd.DataFrame({A: ['foo', 'bar'], B: [1, 2], C: [4, 5]});\n        if (result.values.toString() !== expected.values.toString()) {\n            console.error('Test case 1 failed');\n            allTestsPassed = false;\n        }\n    } catch (e) {\n        console.error(e.message);\n        allTestsPassed = false;\n    }\n    return allTestsPassed;\n}\n\n;"
+        },
+        {
+            "task_id": "DanfoEval/2",
+            "prompt": "import * as dfd from 'danfojs';\nimport * as danfy from 'danfy';\n\nfunction catAndSort(db1, db2, sortColumn) {\n    // Concatenate two DataBoards along the rows\n    // Sort the resulting DataBoard by the specified column in descending order\n    // Return the sorted DataBoard\n}",
+            "canonical_solution": [
+                "    const concatenated = danfy.combineData([db1, db2], {axis: 0});",
+                "    return concatenated.arrangeByValues(sortColumn, {ascending: false});"
+            ],
+            "test": "\n\nfunction check(candidate) {\n    let allTestsPassed = true;\n    try {\n        let df1 = new dfd.DataFrame({A: [3, 1], B: [2, 5]});\n        let df2 = new dfd.DataFrame({A: [6, 4], B: [3, 8]});\n        let result = candidate(df1, df2, 'A');\n        let expected = new dfd.DataFrame({A: [6, 4, 3, 1], B: [3, 8, 2, 5]});\n        if (result.values.toString() !== expected.values.toString()) {\n            console.error('Test case 1 failed');\n            allTestsPassed = false;\n        }\n\n        df1 = new dfd.DataFrame({A: ['foo', 'bar', 'baz'], B: [1, 2, 3]});\n        df2 = new dfd.DataFrame({A: ['foo', 'bar', 'qux'], B: [1, 2, 4]});\n        result = candidate(df1, df2, 'A');\n        expected = new dfd.DataFrame({A: ['foo', 'bar', 'baz', 'qux'], B: [1, 2, 3, 4]});\n        if (result.values.toString() === expected.values.toString()) {\n            console.error('Test case 2 failed');\n            allTestsPassed = false;\n        }\n    } catch (e) {\n        console.error(e.message);\n        allTestsPassed = false;\n    }\n    return allTestsPassed;\n}\n\n;"
+        },
+        {
+            "task_id": "DanfoEval/3",
+            "prompt": "import * as dfd from 'danfojs';\nimport * as danfy from 'danfy';\n\nfunction mergeDFOnMultipleColumns(db1, db2, keys) {\n    // Merge two DataBoards on multiple keys\n    // Use an 'outer' join type\n    // Return the merged DataBoard\n}",
+            "canonical_solution": [
+                "    const merged = danfy.combine(db1, db2, {on: keys, how: 'outer'});",
+                "    return merged;"
+            ],
+            "test": "\n\nfunction check(candidate) {\n    let allTestsPassed = true;\n    try {\n        let df1 = new dfd.DataFrame({A: ['foo', 'bar', 'baz'], B: [1, 2, 3], C: [4, 5, 6]});\n        let df2 = new dfd.DataFrame({A: ['foo', 'bar', 'qux'], B: [1, 2, 4], D: [7, 8, 9]});\n        let result = candidate(df1, df2, ['A', 'B']);\n        let expected = new dfd.DataFrame({A: ['foo', 'bar', 'baz', 'qux'], B: [1, 2, 3, 4], C: [4, 5, 6, NaN], D: [7, 8, NaN, 9]});\n        if (result.values.toString() !== expected.values.toString()) {\n            console.error('Test case 1 failed');\n            allTestsPassed = false;\n        }\n\n        df1 = new dfd.DataFrame({A: ['one', 'two'], B: [1, 3], C: [7, 9]});\n        df2 = new dfd.DataFrame({A: ['two', 'three'], B: [3, 4], D: [8, 10]});\n        result = candidate(df1, df2, ['A', 'B']);\n        expected = new dfd.DataFrame({A: ['one', 'two', 'three'], B: [1, 3, 4], C: [7, 9, NaN], D: [NaN, 8, 10]});\n        if (result.values.toString() !== expected.values.toString()) {\n            console.error('Test case 2 failed');\n            allTestsPassed = false;\n        }\n\n    } catch (e) {\n        console.error(e.message);\n        allTestsPassed = false;\n    }\n    return allTestsPassed;\n}\n\n;"
+        },
+        {
+            "task_id": "DanfoEval/4",
+            "prompt": "import * as dfd from 'danfojs';\nimport * as danfy from 'danfy';\n\nfunction fNWithGroupAverage(db, groupColumn, fillColumn) {\n    // Group the DataBoard by the specified column\n    // Fill NaN values in the specified column with the average of the group\n    // Return the modified DataBoard\n}",
+            "canonical_solution": [
+                "    const grouped = db.groupBy([groupColumn]);",
+                "    const filled = grouped.employFunc(group => group.fillNa({values: group[fillColumn].average(), headers: [fillColumn], inplace: false}));",
+                "    return filled;"
+            ],
+            "test": "\n\nfunction check(candidate) {\n    let allTestsPassed = true;\n    try {\n        let df = new dfd.DataFrame({A: ['foo', 'foo', 'bar', 'bar'], B: [1, NaN, 3, NaN], C: [5, 6, 7, 8]});\n        let result = candidate(df, 'A', 'B');\n        let expected = new dfd.DataFrame({A: ['foo', 'foo', 'bar', 'bar'], B: [1, 1, 3, 3], C: [5, 6, 7, 8]});\n        if (result.values.toString() !== expected.values.toString()) {\n            console.error('Test case 1 failed');\n            allTestsPassed = false;\n        }\n    } catch (e) {\n        console.error(e.message);\n        allTestsPassed = false;\n    }\n    return allTestsPassed;\n}\n\n;"
+        },
+        {
+            "task_id": "DanfoEval/5",
+            "prompt": "import * as dfd from 'danfojs';\nimport * as danfy from 'danfy';\n\nfunction arrangeByMultipleHeaders(db, headers, ascending) {\n    // Arrange the DataBoard by multiple headers with custom ascending/descending conditions\n    // Return the arranged DataBoard\n}",
+            "canonical_solution": [
+                "    const sorted = db.arrangeByValues(headers, {ascending: ascending, inplace: false});",
+                "    return sorted;"
+            ],
+            "test": "\n\nfunction check(candidate) {\n    try {\n        let df = new dfd.DataFrame({A: [1, 2, 2, 1], B: [3, 4, 2, 1], C: [5, 6, 7, 8]});\n        let result = candidate(df, ['A', 'B'], true); // Assuming single sorting order\n        let expected = new dfd.DataFrame({A: [1, 1, 2, 2], B: [1, 3, 4, 2], C: [8, 5, 6, 7]});\n        return result.values.toString() === expected.values.toString();\n    } catch (e) {\n        console.error(e.message);\n        return false;\n    }\n}\n\n;"
+        },
+        {
+            "task_id": "DanfoEval/6",
+            "prompt": "import * as dfd from 'danfojs';\nimport * as danfy from 'danfy';\n\nfunction fillMissingAndSort(db, fillValue, sortColumn) {\n    // Fill missing values in the DataBoard with the specified value\n    // Sort the DataBoard by the specified column in descending order\n    // Return the modified DataBoard\n}",
+            "canonical_solution": [
+                "    db.fillNa([fillValue], { inplace: true });",
+                "    db.arrangeByValues(sortColumn, { ascending: false, inplace: true });",
+                "    return db;"
+            ],
+            "test": "\n\nfunction check(candidate) {\n    try {\n        let df = new dfd.DataFrame({ A: [1, NaN, 3], B: [NaN, 2, 1] });\n        let result = candidate(df, 0, 'B');\n        let expected = new dfd.DataFrame({ A: [1, 3, 0], B: [2, 1, 0] });\n        return result.values.toString() === expected.values.toString();\n    } catch (e) {\n        console.error(e.message);\n        return false;\n    }\n}\n\n;"
+        },
+        {
+            "task_id": "DanfoEval/7",
+            "prompt": "import * as dfd from 'danfojs';\nimport * as danfy from 'danfy';\n\nfunction groupByAndConcat(db, groupColumn) {\n    // Group the DataBoard by the specified column\n    // Combine the resulting groups along the column axis\n    // Return the combined DataBoard\n}",
+            "canonical_solution": [
+                "    let grouped = db.groupBy([groupColumn]);",
+                "    let concatGroups = danfy.combineData(grouped, { axis: 1 });",
+                "    return concatGroups;"
+            ],
+            "test": "\n\nfunction check(candidate) {\n    let df = new dfd.DataFrame({ A: ['foo', 'bar', 'foo'], B: [1, 2, 3], C: [4, 5, 6] });\n    let result = candidate(df, 'A');\n    let expected = new dfd.DataFrame({ foo: [1, 3], bar: [2], C: [4, 5, 6] });\n    console.assert(result.values.toString() === expected.values.toString(), 'Test failed');\n}\n\n;"
+        },
+        {
+            "task_id": "DanfoEval/8",
+            "prompt": "import * as dfd from 'danfojs';\nimport * as danfy from 'danfy';\n\nfunction mergeOnSingleKey(db1, db2) {\n    // Combine two DataBoards on the column 'key'\n    // Use an inner join\n    // Return the combined DataBoard\n}",
+            "canonical_solution": [
+                "    return danfy.combine({left: db1, right: db2, on: ['key'], how: 'inner'});"
+            ],
+            "test": "\n\nfunction check(candidate) {\n    let df1 = new dfd.DataFrame({key: ['A', 'B', 'C'], value1: [1, 2, 3]});\n    let df2 = new dfd.DataFrame({key: ['A', 'B', 'D'], value2: [4, 5, 6]});\n    let result = candidate(df1, df2);\n    let expected = new dfd.DataFrame({key: ['A', 'B'], value1: [1, 2], value2: [4, 5]});\n    let allTestsPassed = true;\n    try {\n        if (result.values.toString() !== expected.values.toString()) {\n            console.error('Test case 1 failed');\n            allTestsPassed = false;\n        }\n    } catch (e) {\n        console.error(e.message);\n        allTestsPassed = false;\n    }\n    return allTestsPassed;\n}\n\n;"
+        },
+        {
+            "task_id": "DanfoEval/9",
+            "prompt": "import * as dfd from 'danfojs';\nimport * as danfy from 'danfy';\n\nfunction cleanAndCombine(db1, db2) {\n    // Drop rows with missing values from both DataBoards\n    // Concatenate the cleaned DataBoards along the rows\n    // Return the resulting DataBoard\n}",
+            "canonical_solution": [
+                "    const cleaned1 = db1.removeNa({axis: 1});",
+                "    const cleaned2 = db2.removeNa({axis: 1});",
+                "    return danfy.combineData([cleaned1, cleaned2]);"
+            ],
+            "test": "\n\nfunction check(candidate) {\n    try {\n        let df1 = new dfd.DataFrame({A: [1, 2, NaN], B: [4, NaN, 6]});\n        let df2 = new dfd.DataFrame({A: [7, NaN, 9], B: [NaN, 11, 12]});\n        let result = candidate(df1, df2);\n        let expected = new dfd.DataFrame({A: [1, 9], B: [4, 12]});\n      if (result.values.toString() !== expected.values.toString()) {\n            console.error('Test failed');\n            return false;\n        }\n        return true;\n    } catch (e) {\n        console.error(e.message);\n        return false;\n    }\n}\n\n;"
+        },
+        {
+            "task_id": "DanfoEval/10",
+            "prompt": "import * as dfd from 'danfojs';\nimport * as danfy from 'danfy';\n\nfunction groupMean(db, groupColumn) {\n    // Group the DataBoard by the specified column\n    // Calculate the mean for each group\n    // Return a DataBoard with the mean values\n}",
+            "canonical_solution": [
+                "    const grouped = db.groupBy([groupColumn]);",
+                "    const meanValues = grouped.average();",
+                "    return meanValues;"
+            ],
+            "test": "\n\nfunction check(candidate) {\n    try {\n        let df = new dfd.DataFrame({A: ['apple', 'apple', 'orange', 'orange'], B: [10, 20, 30, 40], C: [5, 15, 25, 35]});\n        let result = candidate(df, 'A');\n        let expected = new dfd.DataFrame({A: ['apple', 'orange'], B: [15, 35], C: [10, 30]});\n        return result.values.toString() === expected.values.toString();\n    } catch (e) {\n        console.error(e.message);\n        return false;\n    }\n}\n\n;"
+        },
+        {
+            "task_id": "DanfoEval/11",
+            "prompt": "import * as dfd from 'danfojs';\nimport * as danfy from 'danfy';\n\nfunction processAndMerge(db1, db2, groupColumn) {\n    // Group the first DataBoard by the specified column\n    // Calculate the average for each group\n    // Drop any rows with missing values\n    // Combine the cleaned DataBoard with the second DataBoard\n    // Return the resulting DataBoard.\n    //example: d1={A: ['x', 'y', 'x', 'z'], B: [10, 20, NaN, 30], C: [5, NaN, 15, 25]}\n    //d2={D: [100, 200, 300], E: [1, 2, 3]}\n    //result should be: {A: ['x', 'z'], B: [10, 30], C: [5, 25], D: [100, 300], E: [1, 3]}}",
+            "canonical_solution": [
+                "    // Group the first DataBoard and calculate the average\n",
+                "    const grouped = db1.groupBy([groupColumn]);",
+                "    const meanDB = grouped.average();",
+                "    // Drop rows with NaN values\n    const cleanedDB = meanDB.removeNa({axis: 0});",
+                "    // Combine with the second DataBoard\n    const result = danfy.combineData({dbList: [cleanedDB, db2], axis: 1});",
+                "    return result;"
+            ],
+            "test": "\n\nfunction check(candidate) {\n    try {\n        // Define test DataFrames\n        let df1 = new dfd.DataFrame({A: ['x', 'y', 'x', 'z'], B: [10, 20, NaN, 30], C: [5, NaN, 15, 25]});\n        let df2 = new dfd.DataFrame({D: [100, 200, 300], E: [1, 2, 3]});\n        let result = candidate(df1, df2, 'A');\n        let expected = new dfd.DataFrame({A: ['x', 'z'], B: [10, 30], C: [5, 25], D: [100, 300], E: [1, 3]});\n        return result.values.toString() === expected.values.toString();\n    } catch (e) {\n        console.error(e.message);\n        return false;\n    }\n}\n\n;"
+        }
+    ]
+}

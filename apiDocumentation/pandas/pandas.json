@@ -1,0 +1,570 @@
+{
+    "pandas": {
+        "description": "The pandas library provides high-level data structures and data analysis tools for Python, primarily through its two main classes: Series (1-dimensional) and DataFrame (2-dimensional). It offers a variety of functions for data manipulation and analysis, handling missing data, and merging and joining datasets.",
+        "functions": {
+            "read_csv": {
+                "description": "Reads a comma-separated values (CSV) file into a DataFrame.",
+                "parameters": [
+                    {
+                        "name": "filepath_or_buffer",
+                        "type": "str or file-like object",
+                        "description": "Path to the file or object to read from."
+                    },
+                    {
+                        "name": "sep",
+                        "type": "str, default ','",
+                        "description": "Delimiter to use. For example, use '\\t' for tab-separated values."
+                    },
+                    {
+                        "name": "header",
+                        "type": "int, list of int, default 'infer'",
+                        "description": "Row number(s) to use as the column names. Defaults to the first line of the file."
+                    },
+                    {
+                        "name": "names",
+                        "type": "array-like, optional",
+                        "description": "List of column names to use. If file contains no header row, then you should explicitly pass header=None."
+                    },
+                    {
+                        "name": "index_col",
+                        "type": "int, str, sequence of int / str, or False, default None",
+                        "description": "Column(s) to set as index(MultiIndex)."
+                    },
+                    {
+                        "name": "dtype",
+                        "type": "Type name or dict of column -> type, optional",
+                        "description": "Data type for data or columns. E.g. {'a': np.float64, 'b': np.int32}"
+                    },
+                    {
+                        "name": "parse_dates",
+                        "type": "bool or list of int or names or list of lists or dict, default False",
+                        "description": "Parse dates. E.g. if True -> try parsing the index, if [1, 2, 3] -> try parsing columns 1, 2, 3."
+                    },
+                    {
+                        "name": "na_values",
+                        "type": "scalar, str, list-like, or dict, default None",
+                        "description": "Additional strings to recognize as NA/NaN."
+                    },
+                    {
+                        "name": "thousands",
+                        "type": "str, optional",
+                        "description": "Thousands separator."
+                    }
+                ],
+                "example": "import pandas as pd\n\ndf = pd.read_csv('/path/to/file.csv', sep=',', header=0, index_col=None)"
+            },
+            "DataFrame": {
+                "description": "Two-dimensional, size-mutable, potentially heterogeneous tabular data.",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "type": "array-like, Iterable, dict, or DataFrame",
+                        "description": "Data to populate the DataFrame with."
+                    },
+                    {
+                        "name": "index",
+                        "type": "Index or array-like, optional",
+                        "description": "Index to use for the resulting DataFrame."
+                    },
+                    {
+                        "name": "columns",
+                        "type": "Index or array-like, optional",
+                        "description": "Column labels to use for the resulting DataFrame."
+                    },
+                    {
+                        "name": "dtype",
+                        "type": "dtype, optional",
+                        "description": "Data type to force. Only a single dtype is allowed."
+                    },
+                    {
+                        "name": "copy",
+                        "type": "bool, default False",
+                        "description": "Copy data from inputs. Only affects DataFrame / 2d ndarray input."
+                    }
+                ],
+                "example": "import pandas as pd\n\ndf = pd.DataFrame(data={'col1': [1, 2], 'col2': [3, 4]})"
+            },
+            "merge": {
+                "description": "Merge DataFrame or named Series objects with a database-style join.",
+                "parameters": [
+                    {
+                        "name": "left",
+                        "type": "DataFrame or named Series",
+                        "description": "Left DataFrame or Series to merge."
+                    },
+                    {
+                        "name": "right",
+                        "type": "DataFrame or named Series",
+                        "description": "Right DataFrame or Series to merge."
+                    },
+                    {
+                        "name": "how",
+                        "type": "str, default 'inner'",
+                        "description": "Type of merge to be performed. Options are 'left', 'right', 'outer', 'inner'."
+                    },
+                    {
+                        "name": "on",
+                        "type": "label or list",
+                        "description": "Column or index level names to join on. Must be found in both DataFrames."
+                    },
+                    {
+                        "name": "left_on",
+                        "type": "label or list, or array-like",
+                        "description": "Column or index level names to join on in the left DataFrame."
+                    },
+                    {
+                        "name": "right_on",
+                        "type": "label or list, or array-like",
+                        "description": "Column or index level names to join on in the right DataFrame."
+                    }
+                ],
+                "example": "import pandas as pd\n\ndf1 = pd.DataFrame({'key': ['K0', 'K1', 'K2'], 'A': ['A0', 'A1', 'A2']})\ndf2 = pd.DataFrame({'key': ['K0', 'K1', 'K3'], 'B': ['B0', 'B1', 'B3']})\nresult = pd.merge(df1, df2, on='key', how='inner')"
+            },
+            "drop": {
+                "description": "Remove rows or columns by specifying label names and corresponding axis, or by specifying directly index or column names.",
+                "parameters": [
+                    {
+                        "name": "labels",
+                        "type": "single label or list-like",
+                        "description": "Index or column labels to drop."
+                    },
+                    {
+                        "name": "axis",
+                        "type": "int or str, default 0",
+                        "description": "Whether to drop labels from the index (0 or 'index') or columns (1 or 'columns')."
+                    },
+                    {
+                        "name": "inplace",
+                        "type": "bool, default False",
+                        "description": "If True, do operation inplace and return None."
+                    },
+                    {
+                        "name": "errors",
+                        "type": "str, default 'raise'",
+                        "description": "If 'ignore', suppress error and only existing labels are dropped."
+                    }
+                ],
+                "example": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6], 'C': [7, 8, 9]})\ndf = df.drop(['B'], axis=1)"
+            },
+            "groupby": {
+                "description": "Group DataFrame using a mapper or by a Series of columns, and apply a function to the groups.",
+                "parameters": [
+                    {
+                        "name": "by",
+                        "type": "mapping, function, label, or list of labels",
+                        "description": "Used to determine the groups for the groupby."
+                    },
+                    {
+                        "name": "axis",
+                        "type": "int, default 0",
+                        "description": "Split along rows (0) or columns (1)."
+                    },
+                    {
+                        "name": "level",
+                        "type": "int, level name, or sequence of such, default None",
+                        "description": "If the axis is a MultiIndex (hierarchical), group by a particular level or levels."
+                    },
+                    {
+                        "name": "as_index",
+                        "type": "bool, default True",
+                        "description": "For aggregated output, return object with group labels as the index."
+                    }
+                ],
+                "example": "import pandas as pd\n\ndf = pd.DataFrame({'A': ['foo', 'bar', 'foo', 'bar'], 'B': [1, 2, 3, 4]})\ngrouped = df.groupby('A').sum()"
+            },
+            "pivot_table": {
+                "description": "Create a spreadsheet-style pivot table as a DataFrame.",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "type": "DataFrame",
+                        "description": "DataFrame to pivot."
+                    },
+                    {
+                        "name": "values",
+                        "type": "column to aggregate or list of columns",
+                        "description": "Column(s) to aggregate."
+                    },
+                    {
+                        "name": "index",
+                        "type": "column, list of columns, or keys",
+                        "description": "Column(s) to set as index."
+                    },
+                    {
+                        "name": "columns",
+                        "type": "column, list of columns, or keys",
+                        "description": "Column(s) to set as columns."
+                    },
+                    {
+                        "name": "aggfunc",
+                        "type": "function, list of functions, dict, or default 'mean'",
+                        "description": "Function to use for aggregation."
+                    }
+                ],
+                "example": "import pandas as pd\n\ndf = pd.DataFrame({'A': ['foo', 'foo', 'bar', 'bar'], 'B': ['one', 'two', 'one', 'two'], 'C': [1, 3, 2, 4]})\npivot = df.pivot_table(values='C', index='A', columns='B', aggfunc='sum')"
+            },
+            "concat": {
+                "description": "Concatenate pandas objects along a particular axis with optional set logic along the other axes.",
+                "parameters": [
+                    {
+                        "name": "objs",
+                        "type": "a sequence or mapping of Series or DataFrame objects",
+                        "description": "The Series or DataFrame objects to be concatenated."
+                    },
+                    {
+                        "name": "axis",
+                        "type": "int, default 0",
+                        "description": "The axis to concatenate along. 0 for rows, 1 for columns."
+                    },
+                    {
+                        "name": "join",
+                        "type": "str, {'inner', 'outer'}, default 'outer'",
+                        "description": "How to handle indexes on other axes. 'outer' for union, 'inner' for intersection."
+                    },
+                    {
+                        "name": "ignore_index",
+                        "type": "bool, default False",
+                        "description": "If True, do not use the index values along the concatenation axis. The resulting axis will be labeled 0, …, n-1."
+                    },
+                    {
+                        "name": "keys",
+                        "type": "sequence, default None",
+                        "description": "If provided, use the provided key values to construct a hierarchical index."
+                    }
+                ],
+                "example": "import pandas as pd\n\ndf1 = pd.DataFrame({'A': ['A0', 'A1', 'A2'], 'B': ['B0', 'B1', 'B2']})\ndf2 = pd.DataFrame({'A': ['A3', 'A4', 'A5'], 'B': ['B3', 'B4', 'B5']})\nresult = pd.concat([df1, df2], axis=0, ignore_index=True)"
+            },
+            "fillna": {
+                "description": "Fill NA/NaN values using the specified method.",
+                "parameters": [
+                    {
+                        "name": "value",
+                        "type": "scalar, dict, Series, or DataFrame",
+                        "description": "Value to use to fill holes (e.g., 0)."
+                    },
+                    {
+                        "name": "method",
+                        "type": "str, default None",
+                        "description": "Method to use for filling holes ('backfill', 'bfill', 'pad', 'ffill')."
+                    },
+                    {
+                        "name": "axis",
+                        "type": "int or str, default None",
+                        "description": "Axis along which to fill missing values."
+                    },
+                    {
+                        "name": "inplace",
+                        "type": "bool, default False",
+                        "description": "If True, fill in place and return None."
+                    }
+                ],
+                "example": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, None, 3], 'B': [None, 2, 3]})\ndf_filled = df.fillna(0)"
+            },
+            "apply": {
+                "description": "Apply a function along an axis of the DataFrame.",
+                "parameters": [
+                    {
+                        "name": "func",
+                        "type": "function, str, list or dict",
+                        "description": "Function to apply to each column or row."
+                    },
+                    {
+                        "name": "axis",
+                        "type": "int or str, default 0",
+                        "description": "Axis along which the function is applied. 0 or 'index' means apply function to each column; 1 or 'columns' means apply function to each row."
+                    },
+                    {
+                        "name": "raw",
+                        "type": "bool, default False",
+                        "description": "If False, the function is passed a Series object for each column or row."
+                    },
+                    {
+                        "name": "result_type",
+                        "type": "str, default None",
+                        "description": "The kind of result to return when applying the function. Options are 'expand', 'reduce', 'broadcast', or None."
+                    }
+                ],
+                "example": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\ndef add_one(x): return x + 1\ndf_applied = df.apply(add_one)"
+            },
+            "sort_values": {
+                "description": "Sort by the values along either axis.",
+                "parameters": [
+                    {
+                        "name": "by",
+                        "type": "str or list of str",
+                        "description": "Column(s) to sort by."
+                    },
+                    {
+                        "name": "axis",
+                        "type": "int, default 0",
+                        "description": "Axis to sort along. 0 for index, 1 for columns."
+                    },
+                    {
+                        "name": "ascending",
+                        "type": "bool or list of bool, default True",
+                        "description": "Sort ascending vs. descending. If list of bool, must match the length of the by."
+                    },
+                    {
+                        "name": "inplace",
+                        "type": "bool, default False",
+                        "description": "If True, perform operation in place."
+                    },
+                    {
+                        "name": "na_position",
+                        "type": "str, default 'last'",
+                        "description": "Puts NaNs at the beginning if 'first'; 'last' puts NaNs at the end."
+                    }
+                ],
+                "example": "import pandas as pd\n\ndf = pd.DataFrame({'A': [2, 1, 3], 'B': [1, 2, 3]})\ndf_sorted = df.sort_values(by='A')"
+            },
+            "iloc": {
+                "description": "Purely integer-location based indexing for selection by position.",
+                "parameters": [
+                    {
+                        "name": "i",
+                        "type": "int, slice, or list of int",
+                        "description": "Row position(s) to select."
+                    },
+                    {
+                        "name": "j",
+                        "type": "int, slice, or list of int",
+                        "description": "Column position(s) to select."
+                    }
+                ],
+                "example": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\nvalue = df.iloc[0, 1]"
+            },
+            "to_csv": {
+                "description": "Write DataFrame to a comma-separated values (CSV) file.",
+                "parameters": [
+                    {
+                        "name": "path_or_buf",
+                        "type": "str or file-like object, default None",
+                        "description": "File path or object. If None is provided, the result is returned as a string."
+                    },
+                    {
+                        "name": "sep",
+                        "type": "str, default ','",
+                        "description": "String of length 1. Field delimiter for the output file."
+                    },
+                    {
+                        "name": "index",
+                        "type": "bool, default True",
+                        "description": "Write row names (index)."
+                    },
+                    {
+                        "name": "header",
+                        "type": "bool or list of str, default True",
+                        "description": "Write out the column names. If a list of string is given, it is assumed to be aliases for the column names."
+                    },
+                    {
+                        "name": "columns",
+                        "type": "sequence, optional",
+                        "description": "Columns to write."
+                    }
+                ],
+                "example": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\ndf.to_csv('/path/to/file.csv')"
+            },
+            "read_excel": {
+                "description": "Reads an Excel file into a pandas DataFrame.",
+                "parameters": [
+                    {
+                        "name": "io",
+                        "type": "str, bytes, ExcelFile, or xlrd.Book",
+                        "description": "The path to the Excel file."
+                    },
+                    {
+                        "name": "sheet_name",
+                        "type": "str, int, list, or None, default 0",
+                        "description": "Name or index of sheet or sheets to read. If None, all sheets are read."
+                    },
+                    {
+                        "name": "header",
+                        "type": "int, list of int, default 0",
+                        "description": "Row number(s) to use as the column names."
+                    },
+                    {
+                        "name": "names",
+                        "type": "array-like, optional",
+                        "description": "List of column names to use."
+                    },
+                    {
+                        "name": "index_col",
+                        "type": "int, str, sequence of int / str, or False, default None",
+                        "description": "Column(s) to set as index(MultiIndex)."
+                    },
+                    {
+                        "name": "usecols",
+                        "type": "int, str, list-like, or callable, optional",
+                        "description": "Return a subset of the columns."
+                    }
+                ],
+                "example": "import pandas as pd\n\ndf = pd.read_excel('/path/to/file.xlsx', sheet_name='Sheet1', header=0)"
+            },
+            "crosstab": {
+                "description": "Computes a simple cross-tabulation of two (or more) factors. By default computes a frequency table of the factors unless an array of values and an aggregation function are passed.",
+                "parameters": [
+                    {
+                        "name": "index",
+                        "type": "array-like, Series, or list of arrays/Series",
+                        "description": "Values to group by in the rows."
+                    },
+                    {
+                        "name": "columns",
+                        "type": "array-like, Series, or list of arrays/Series",
+                        "description": "Values to group by in the columns."
+                    },
+                    {
+                        "name": "values",
+                        "type": "array-like, optional",
+                        "description": "Array of values to aggregate according to the factors."
+                    },
+                    {
+                        "name": "aggfunc",
+                        "type": "function, optional",
+                        "description": "If specified, applies aggregation function to the data."
+                    },
+                    {
+                        "name": "margins",
+                        "type": "bool, default False",
+                        "description": "Add row/column margins (subtotals)."
+                    },
+                    {
+                        "name": "normalize",
+                        "type": "bool, {'all', 'index', 'columns'}, or {None, 1, 0}, default False",
+                        "description": "Normalize by dividing all values by the sum of values."
+                    }
+                ],
+                "example": "import pandas as pd\n\ndata = {'A': [1, 2, 1], 'B': [2, 2, 3]}\ndf = pd.DataFrame(data)\ncrosstab_result = pd.crosstab(df['A'], df['B'])"
+            },
+            "melt": {
+                "description": "Unpivots a DataFrame from wide format to long format, optionally leaving identifiers set.",
+                "parameters": [
+                    {
+                        "name": "frame",
+                        "type": "DataFrame",
+                        "description": "The DataFrame to unpivot."
+                    },
+                    {
+                        "name": "id_vars",
+                        "type": "tuple, list, or ndarray, optional",
+                        "description": "Column(s) to use as identifier variables."
+                    },
+                    {
+                        "name": "value_vars",
+                        "type": "tuple, list, or ndarray, optional",
+                        "description": "Column(s) to unpivot. If not specified, uses all columns that are not set as `id_vars`."
+                    },
+                    {
+                        "name": "var_name",
+                        "type": "scalar, default 'variable'",
+                        "description": "Name to use for the `variable` column."
+                    },
+                    {
+                        "name": "value_name",
+                        "type": "scalar, default 'value'",
+                        "description": "Name to use for the `value` column."
+                    }
+                ],
+                "example": "import pandas as pd\n\ndf = pd.DataFrame({'A': ['a', 'b', 'c'], 'B': [1, 2, 3], 'C': [4, 5, 6]})\nresult = pd.melt(df, id_vars=['A'], value_vars=['B', 'C'], var_name='my_var', value_name='my_val')"
+            },
+            "dropna": {
+                "description": "Remove missing values from a DataFrame or Series.",
+                "parameters": [
+                    {
+                        "name": "axis",
+                        "type": "int or str, default 0",
+                        "description": "Determine if rows or columns which contain missing values are removed. 0 or 'index' for rows, 1 or 'columns' for columns."
+                    },
+                    {
+                        "name": "how",
+                        "type": "str, {'any', 'all'}, default 'any'",
+                        "description": "'any' will drop rows/columns that contain any missing values. 'all' will drop rows/columns where all elements are missing."
+                    },
+                    {
+                        "name": "thresh",
+                        "type": "int, optional",
+                        "description": "Require that many non-NA values to retain the row/column. If not specified, drop rows/columns with any or all missing values."
+                    },
+                    {
+                        "name": "subset",
+                        "type": "array-like, optional",
+                        "description": "Labels along other axis to consider. For example, if you are dropping rows, these would be a list of columns to include."
+                    },
+                    {
+                        "name": "inplace",
+                        "type": "bool, default False",
+                        "description": "If True, do operation in place and return None."
+                    }
+                ],
+                "example": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, None, 3], 'B': [4, 5, None]})\nresult = df.dropna()"
+            },
+            "values": {
+                "description": "Return a Numpy representation of the DataFrame or Series.",
+                "type": "numpy.ndarray",
+                "example": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\narray = df.values"
+            },
+            "std": {
+                "description": "Return sample standard deviation over requested axis.",
+                "parameters": [
+                    {
+                        "name": "axis",
+                        "type": "int, default 0",
+                        "description": "Axis for the function to be applied on. 0 or 'index' for rows, 1 or 'columns' for columns."
+                    },
+                    {
+                        "name": "skipna",
+                        "type": "bool, default True",
+                        "description": "Exclude NA/null values when computing the result."
+                    },
+                    {
+                        "name": "level",
+                        "type": "int or str, default None",
+                        "description": "If the axis is a MultiIndex (hierarchical), count along a particular level, collapsing into a DataFrame."
+                    },
+                    {
+                        "name": "ddof",
+                        "type": "int, default 1",
+                        "description": "Delta Degrees of Freedom. The divisor used in calculations is N - ddof, where N represents the number of elements."
+                    },
+                    {
+                        "name": "numeric_only",
+                        "type": "bool, default None",
+                        "description": "Include only float, int, boolean columns. If None, will attempt to use everything, then use only numeric data."
+                    }
+                ],
+                "example": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\nstd_dev = df.std()"
+            },
+            "reset_index": {
+                "description": "Reset the index of the DataFrame, and use the default one. Optionally, remove the index, rather than moving it to the columns.",
+                "parameters": [
+                    {
+                        "name": "level",
+                        "type": "int, str, tuple, or list, default None",
+                        "description": "Only remove the given levels from the index. Removes all levels by default."
+                    },
+                    {
+                        "name": "drop",
+                        "type": "bool, default False",
+                        "description": "Do not try to insert index into DataFrame columns. This resets the index to the default integer index."
+                    },
+                    {
+                        "name": "inplace",
+                        "type": "bool, default False",
+                        "description": "Modify the DataFrame in place (do not create a new object)."
+                    },
+                    {
+                        "name": "col_level",
+                        "type": "int, default 0",
+                        "description": "If the columns have multiple levels, determines which level the labels are inserted into."
+                    },
+                    {
+                        "name": "col_fill",
+                        "type": "object, default ''",
+                        "description": "If the columns have multiple levels, determines how the other levels are named."
+                    }
+                ],
+                "example": "import pandas as pd\n\ndf = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})\ndf_reset = df.reset_index()"
+            }
+        }
+    }
+}

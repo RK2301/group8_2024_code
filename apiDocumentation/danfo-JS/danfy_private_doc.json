@@ -1,0 +1,291 @@
+{
+    "danfy": {
+        "description": "Danfy.js is a JavaScript library that provides high-level data structures and data analysis tools, similar to pandas in Python. It offers a variety of functions for data manipulation and analysis, including handling missing data, reading and writing data, and performing operations on DataFrames and Series.",
+        "functions": {
+            "importCSV": {
+                "description": "Reads a comma-separated values (CSV) file into a DataBoard.",
+                "parameters": [
+                    {
+                        "name": "filepath",
+                        "type": "string",
+                        "description": "The path to the CSV file to read."
+                    },
+                    {
+                        "name": "header",
+                        "type": "boolean or integer, default true",
+                        "description": "Indicates whether the file contains a header row."
+                    },
+                    {
+                        "name": "dtype",
+                        "type": "object, optional",
+                        "description": "Data types for the columns. E.g., { 'col1': 'int32', 'col2': 'float32' }."
+                    },
+                    {
+                        "name": "na_values",
+                        "type": "array, string, or object, default null",
+                        "description": "Additional strings to recognize as NA/NaN."
+                    }
+                ],
+                "example": "const db = danfy.importCSV('path/to/file.csv');"
+            },
+            "DataBoard": {
+                "description": "Creates a DataBoard, a 2-dimensional labeled data structure with headers of potentially different types.",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "type": "array or object",
+                        "description": "The data to be stored in the DataBoard."
+                    },
+                    {
+                        "name": "headers",
+                        "type": "array of strings, optional",
+                        "description": "Header names for the DataBoard."
+                    },
+                    {
+                        "name": "rowLabels",
+                        "type": "array of strings or numbers, optional",
+                        "description": "Row labels for the DataBoard."
+                    }
+                ],
+                "example": "const db = new danfy.DataBoard([[1, 2], [3, 4]], {headers: ['A', 'B']});"
+            },
+            "Collection": {
+                "description": "Creates a Collection, a one-dimensional array-like object containing an array of data and an associated array of data labels.",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "type": "array or object",
+                        "description": "The data to be stored in the Collection."
+                    },
+                    {
+                        "name": "rowLabels",
+                        "type": "array of strings or numbers, optional",
+                        "description": "Row labels for the Collection."
+                    }
+                ],
+                "example": "const collection = new danfy.Collection([1, 2, 3, 4]);"
+            },
+            "combine": {
+                "description": "Merges DataBoard objects with a database-style join.",
+                "parameters": [
+                    {
+                        "name": "left",
+                        "type": "DataBoard",
+                        "description": "The first DataBoard to merge."
+                    },
+                    {
+                        "name": "right",
+                        "type": "DataBoard",
+                        "description": "The second DataBoard to merge."
+                    },
+                    {
+                        "name": "on",
+                        "type": "array of column/s name",
+                        "description": "Column names to join on. Must be found in both the left and right DataBoard and/or Series objects"
+                    },
+                    {
+                        "name": "how",
+                        "type": "string, default 'inner'",
+                        "description": "Type of merge to be performed. One of 'left', 'right', 'outer', 'inner'. Defaults to 'inner'"
+                    }
+                ],
+                "example": "const db3 = danfy.combine({left: db1, right: db2, on: ['key1'], how: 'inner'});"
+            },
+            "combineData": {
+                "description": "Concatenates two or more DataBoard or Collection objects along a particular axis.",
+                "parameters": [
+                    {
+                        "name": "dfList",
+                        "type": "array of DataBoard or Collection",
+                        "description": "List of DataBoard or Collection to concatenate together."
+                    },
+                    {
+                        "name": "axis",
+                        "type": "integer, default 1",
+                        "description": "One of 0 or 1. The axis on which to perform concatenation. Specified axis must align in both Objects"
+                    }
+                ],
+                "example": "let data = [['K0', 'k0', 'A0', 'B0'], ['k0', 'K1', 'A1', 'B1'], 'K1', 'K0', 'A2', 'B2'], ['K2', 'K2', 'A3', 'B3']]; let data2 = [['K0', 'k0', 'C0', 'D0'], ['K1', 'K0', 'C1', 'D1'], ['K1', 'K0', 'C2', 'D2'], ['K2', 'K0', 'C3', 'D3']];  let colum1 = ['Key1', 'Key2', 'A', 'B']; let colum2 = ['Key1', 'Key2', 'A', 'D']; let db1 = new danfy.DataBoard(data, { columns: colum1 }); let db2 = new danfy.DataBoard(data2, { columns: colum2 }); let com_db = danfy.combineData({ dfList: [db1, db2], axis: 1 })"
+            },
+            "exportCSV": {
+                "description": "Converts a DataBoard to a CSV file.",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "type": "DataBoard",
+                        "description": "The DataBoard to be converted to CSV."
+                    },
+                    {
+                        "name": "options",
+                        "type": "object, optional",
+                        "description": "Options to customize the CSV output. Properties can include 'filePath' (string) to specify the file path, and 'header' (boolean, default true) to include or exclude headers."
+                    }
+                ],
+                "example": "danfy.exportCSV(db, {filePath: 'path/to/save.csv', header: true});",
+                "returns": "A CSV file saved at the specified path."
+            },
+            "removeNa": {
+                "description": "Removes missing values  (NaNs, undefined, null) from a DataFrame or Series.",
+                "parameters": [
+                    {
+                        "name": "axis",
+                        "type": "integer, optional, default 1",
+                        "description": "0 or 1. If 0, drop columns with NaNs, if 1, drop rows with NaNs"
+                    },
+                    {
+                        "name": "inplace",
+                        "type": "boolean, optional, default false",
+                        "description": "If true, the operation will be performed in place and will not return a new DataBoard or Collection."
+                    }
+                ],
+                "example": "db.removeNa({axis: 0, inplace: true});",
+                "returns": "A new DataBoard or Collection with missing values dropped."
+            },
+            "arrangeByValues": {
+                "description": "Sort a DataBoard in ascending or descending order by a specified column name..",
+                "parameters": [
+                    {
+                        "name": "by",
+                        "type": "Object",
+                        "description": "This key can be either a single column name or a single array of the same length as the calling DataBoard."
+                    },
+                    {
+                        "name": "ascending",
+                        "type": "boolean, optional, default true",
+                        "description": "Sort ascending vs. descending."
+                    },
+                    {
+                        "name": "inplace",
+                        "type": "boolean, optional, default false",
+                        "description": "If true, the operation is performed in place and the DataBoard is modified. Otherwise, a new DataBoard is returned."
+                    }
+                ],
+                "example": "db.arrangeByValues('column_name', {ascending: false, inplace: true});",
+                "returns": "A sorted DataBoard if inplace is false; otherwise, returns null."
+            },
+            "indexLocate": {
+                "description": "Selects a subset of a DataBoard or Collection by integer location.",
+                "parameters": [
+                    {
+                        "name": "rows",
+                        "type": "integer or array of integers",
+                        "description": "The row index(es) to select."
+                    },
+                    {
+                        "name": "columns",
+                        "type": "integer or array of integers, optional",
+                        "description": "The column index(es) to select."
+                    }
+                ],
+                "example": "db.indexLocate({rows: [0,1,3]}); db.indexLocate({columns: ['1:']}); db.indexLocate({rows: [0,3], columns: [1,2]})",
+                "returns": "A DataBoard or Collection with the selected rows and columns."
+            },
+            "getTopRows": {
+                "description": "Returns the first n rows of a DataBoard or Collection.",
+                "parameters": [
+                    {
+                        "name": "n",
+                        "type": "integer, optional, default 5",
+                        "description": "The number of rows to return."
+                    }
+                ],
+                "example": "db.getTopRows(3);",
+                "returns": "The first n rows of the DataBoard or Collection."
+            },
+            "average": {
+                "description": "Returns the average of the values for the requested axis",
+                "parameters": [
+                    {
+                        "name": "axis",
+                        "type": "0 or 1",
+                        "description": "optional, axis: 0 or 1. If 0, compute the average column-wise, if 1, row-wise. Defaults to 1",
+                        "default": "1"
+                    }
+                ],
+                "example": "data = [[11, 20, 3], [1, 15, 6], [2, 30, 40], [2, 89, 78]]; cols = ['A', 'B', 'C']; let db = new danfy.DataBoard(data); db.average().print()",
+                "return": "Collection, in the example it will print: 0 -> 11.3333 1 -> 7.3333 2 -> 24 3 -> 56.333"
+            },
+            "fillNa": {
+                "description": "Fill NaN/undefined values using the specified method. Detect missing values for an array-like object.",
+                "parameters": [
+                    {
+                        "name": "values",
+                        "type": "Array | Scalar",
+                        "description": "The list of value(s) to use for replacement."
+                    },
+                    {
+                        "name": "headers",
+                        "type": "array, optional",
+                        "description": "The headers to fill the missing data in. If not specified, all headers will be considered."
+                    },
+                    {
+                        "name": "inplace",
+                        "type": "boolean, optional, default false",
+                        "description": "If true, fills the missing values in place. Otherwise, returns a new DataBoard.",
+                        "default": "{inplace:false}"
+                    }
+                ],
+                "example": "let data = { 'Name': ['Apples', 'Mango', 'Banana', undefined], 'Count': [NaN, 5, NaN, 10],'Price': [200, 300, 40, 250]}; let db = new danfy.DataBoard(data); let values = ['Apples', db['Count'].average()]; let db_filled = db.fillNa(values, { headers: ['Name', 'Count'] })",
+                "returns": "A DataBoard with missing values filled, if inplace is false."
+            },
+            "groupBy": {
+                "description": "Group DataBoard using a mapper or by a Collection of headers.",
+                "parameters": [
+                    {
+                        "name": "headers",
+                        "type": "Array",
+                        "description": "The names of a header(s) in the DataBoard to group by"
+                    }
+                ],
+                "example": "let data = [['Pear', 2, 3], ['Pear', 5, 6], ['Apple', 30, 40], ['Apple', 89, 78]]; let headers = ['A', 'B', 'C']; let db = new danfy.DataBoard(data, { headers: headers }); let group_db = db.groupBy(['A'])",
+                "output": "// output GroupBy { colDict: { Pear: { A: [Array], B: [Array], C: [Array] }, Apple: { A: [Array], B: [Array], C: [Array] } }, keyToValue: { Pear: [ 'Pear' ], Apple: [ 'Apple' ] }, keyCol: [ 'A' ], data: [ [ 'Pear', 2, 3 ], [ 'Pear', 5, 6 ], [ 'Apple', 30, 40 ], [ 'Apple', 89, 78 ] ], headerName: [ 'A', 'B', 'C' ], headerDtype: [ 'string' ], headerIndex: [ 0 ] }",
+                "returns": " groupBy operation will return a GroupBy class object. You can apply any of the following operation on the groupby result: count, sum, std, var, average, max, min"
+            },
+            "changeLabels": {
+                "description": "Change axis Label. Object values must be unique (1-to-1). Label not contained in a dict / Collection will be left as-is. Extra Labeles listed don’t throw an error.",
+                "parameters": [
+                    {
+                        "name": "mapper",
+                        "type": "object",
+                        "description": "Headers and transformations to apply to that axis’ values."
+                    },
+                    {
+                        "name": "axis",
+                        "type": "integer, optional, default 1",
+                        "description": "Axis to target. 0 for rowLabels, 1 for headers."
+                    },
+                    {
+                        "name": "inplace",
+                        "type": "boolean, optional, default false",
+                        "description": "If true, performs the operation in place."
+                    }
+                ],
+                "example": "let data = { 'A': [-20, 30, 47.3], 'B': [34, -4, 5], 'C': [20, 2, 30] }; let db = new danfy.DataBoard(data); db.changeLabels({ 'A': 'new_name' }, { inplace: true })",
+                "returns": "A DataBoard with renamed Labels, if inplace is false."
+            },
+            "removeRowsOrCols": {
+                "description": "Remove specified headers from rowLabels or headers. Remove rowLabels or headers by specifying label names and corresponding axis.",
+                "parameters": [
+                    {
+                        "name": "columns",
+                        "type": "array, optional",
+                        "description": "Array of column names to drop."
+                    },
+                    {
+                        "name": "index",
+                        "type": "Array",
+                        "description": "Array of index labels to drop."
+                    },
+                    {
+                        "name": "inplace",
+                        "type": "Boolean",
+                        "description": "Boolean indicating whether to perform the operation inplace or not. Defaults to false",
+                        "default": "false"
+                    }
+                ],
+                "example": "let data = { 'A': [-20, 30, 47.3, -20], 'B': [34, -4, 5, 6], 'C': [20, 20, 30, 30], 'D': ['a', 'b', 'c', 'c'] }; let db = new danfy.DataBoard(data); db.removeRowsOrCols({ columns: ['C', 'B'], inplace: true });",
+                "returns": "A DataBoard with specified rowLabels/headers removed, if inplace is false."
+            }
+        }
+    }
+}
